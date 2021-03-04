@@ -7,7 +7,7 @@ public enum PixelContent {
     Water,
 }
 
-public enum ForceDirection {
+public enum PixelDirection {
     None,
     Up,
     Down, 
@@ -19,7 +19,7 @@ public class Pixel : MonoBehaviour
 {
     public PixelManager grid;
     public PixelContent content;
-    public ForceDirection force = ForceDirection.Down;
+    public PixelDirection dir = PixelDirection.Down;
     public uint row;
     public uint col;
     public bool movedThisFrame = false;

@@ -34,12 +34,53 @@ public class PixelManager : MonoBehaviour
         RenderGrid();
     }
 
+
+    void Update() {
+        if (Input.GetKeyUp(KeyCode.Space)) {
+            for(uint i = 0; i < totalRow; ++i) {
+                for (uint j = 0; j < totalCol; ++j) {
+                    if (j > 122 && j < 128 && i + j < 200 && i + j > 145) {
+                        pixelArray[i, j].dir = PixelDirection.Up;
+                    }
+                    else if (j > 115 && j < 135 && i > 15)  {
+                        pixelArray[i, j].dir = PixelDirection.None;
+                    }
+                }
+            }
+        }
+    }
+
     void FixedUpdate()
     {
-        foreach(Pixel px in pixelArray) {
-            PixelMovement(px);
+        int rand = Random.Range(0, 4);
+        if (rand / 2 == 0) {
+            for (uint i = 0; i < totalRow; i++) {
+                if (rand % 2 == 0) {
+                    for (uint j = 0; j < totalCol; j++) {
+                        PixelMovement(pixelArray[i, j]);
+                    }
+                }
+                else {
+                    for (uint j = totalCol - 1; j > 0; j--) {
+                        PixelMovement(pixelArray[i, j]);
+                    }
+                }
+            }
         }
-
+        else {
+            for (uint i = totalRow - 1; i > 0; i--) {
+                if (rand % 2 == 0) {
+                    for (uint j = 0; j < totalCol; j++) {
+                        PixelMovement(pixelArray[i, j]);
+                    }
+                }
+                else {
+                    for (uint j = totalCol - 1; j > 0; j--) {
+                        PixelMovement(pixelArray[i, j]);
+                    }
+                }
+            }
+        }
     }
 
     public void InitializeGrid() {
@@ -49,7 +90,7 @@ public class PixelManager : MonoBehaviour
         float yPos = topLeftPos.y - 0.5f * pixelSize;
         for(uint i = 0; i < totalRow; ++i) {
             for (uint j = 0; j < totalCol; ++j) {
-                GameObject newPixel = Instantiate(pixelPrefab, new Vector3(xPos, yPos, 8), Quaternion.identity, gameObject.transform);
+                GameObject newPixel = Instantiate(pixelPrefab, new Vector3(xPos, yPos, transform.position.z), Quaternion.identity, gameObject.transform);
                 pixelArray[i, j] = newPixel.GetComponent<Pixel>();
                 xPos += pixelSize;
                 pixelArray[i, j].grid = this;
@@ -62,6 +103,8 @@ public class PixelManager : MonoBehaviour
                     pixelArray[i, j].content = PixelContent.Empty;
 
                 }
+                
+                pixelArray[i, j].dir = PixelDirection.Down;
             }
             xPos = topLeftPos.x + 0.5f * pixelSize;
             yPos -= pixelSize;
@@ -81,33 +124,7 @@ public class PixelManager : MonoBehaviour
 
     void WaterMovement(Pixel px) {
         // Force
-        Pixel pxToSwap = null;
-        switch (px.force)
-        {
-            case ForceDirection.Up:
-                if (px.row > 0) {
-                    pxToSwap = pixelArray[px.row - 1, px.col];
-                }
-                break;
-            case ForceDirection.Down:
-                if (px.row < totalRow - 1) {
-                    pxToSwap = pixelArray[px.row + 1, px.col];
-                }
-                break;
-            case ForceDirection.Left:
-                if (px.col > 0) {
-                    pxToSwap = pixelArray[px.row, px.col - 1];
-                }
-                break;
-            case ForceDirection.Right:
-                if (px.col < totalCol - 1) {
-                    pxToSwap = pixelArray[px.row, px.col + 1];
-                }
-                break;
-            default:
-                break;
-        }
-        
+        Pixel pxToSwap = GetPixelToSwap(px, px.dir);
         if (pxToSwap != null) {
             switch (pxToSwap.content)
             {
@@ -120,29 +137,24 @@ public class PixelManager : MonoBehaviour
         }
 
         if (!px.GetMovedThisFrame()) {
+
             // Side movement
-            int rand = Random.Range(0, 3);
-            if (rand == 1 && px.col < totalCol - 1) {
-                Pixel pxRight = pixelArray[px.row, px.col + 1];
-                switch (pxRight.content)
-                {
-                    case PixelContent.Water:
-                        break;
-                    default:
-                        SwapContent(px, pxRight);
-                        break;
-                } 
-            }
-            else if (rand == 2 && px.col > 0) {
-                Pixel pxLeft = pixelArray[px.row, px.col - 1];
-                switch (pxLeft.content)
-                {
-                    case PixelContent.Water:
-                        break;
-                    default:
-                        SwapContent(px, pxLeft);
-                        break;
-                } 
+            // int rand = Random.Range(0, 5);
+            // pxToSwap = GetPixelToSwap(px, (PixelDirection) rand);
+            // if (pxToSwap != null) {
+            //     switch (pxToSwap.content)
+            //     {
+            //         case PixelContent.Water:
+            //             break;
+            //         default:
+            //             SwapContent(px, pxToSwap);
+            //             break;
+            //     } 
+            // }
+            List<Pixel> emptyList = CheckEmpty(px);
+            int rand = Random.Range(0, emptyList.Count + 1);
+            if (rand != emptyList.Count) {
+                SwapContent(px, emptyList[rand]);
             }
         }
     }
@@ -187,4 +199,51 @@ public class PixelManager : MonoBehaviour
             yield return new WaitForSeconds(simTimeStep);
         }
     }
+
+    Pixel GetPixelToSwap(Pixel px, PixelDirection dir) {
+        switch (dir)
+        {
+            case PixelDirection.Up:
+                if (px.row > 0) {
+                    return(pixelArray[px.row - 1, px.col]);
+                }
+                break;
+            case PixelDirection.Down:
+                if (px.row < totalRow - 1) {
+                    return(pixelArray[px.row + 1, px.col]);
+                }
+                break;
+            case PixelDirection.Left:
+                if (px.col > 0) {
+                    return(pixelArray[px.row, px.col - 1]);
+                }
+                break;
+            case PixelDirection.Right:
+                if (px.col < totalCol - 1) {
+                    return(pixelArray[px.row, px.col + 1]);
+                }
+                break;
+            default:
+                break;
+        }
+        return null;
+    }
+
+    List<Pixel> CheckEmpty(Pixel px) {
+        List<Pixel> returnList = new List<Pixel>();
+        if (px.row > 0 && pixelArray[px.row - 1, px.col].content == PixelContent.Empty) {
+            returnList.Add(pixelArray[px.row - 1, px.col]);
+        }
+        if (px.row < totalRow - 1 && pixelArray[px.row + 1, px.col].content == PixelContent.Empty) {
+            returnList.Add(pixelArray[px.row + 1, px.col]);
+        }
+        if (px.col > 0 && pixelArray[px.row, px.col - 1].content == PixelContent.Empty) {
+            returnList.Add(pixelArray[px.row, px.col - 1]);
+        }
+        if (px.col < totalCol - 1 && pixelArray[px.row, px.col + 1].content == PixelContent.Empty) {
+            returnList.Add(pixelArray[px.row, px.col + 1]);
+        }
+        return returnList;
+    }
+
 }
