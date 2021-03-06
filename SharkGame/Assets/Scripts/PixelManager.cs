@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
+using Unity.Collections;
+using Unity.Jobs;
 
 public class PixelManager : MonoBehaviour
 {
@@ -13,24 +16,23 @@ public class PixelManager : MonoBehaviour
 
     public Pixel[,] pixelArray;
     
-    [Header("Prefab")]
-    public GameObject pixelPrefab;
-
-    [Header("Colors")]
-    public Color32 waterColor;
-    public Color32 emptyColor;
-
     [Header("Physics")]
     public float simTimeStep;
 
- 
-
+    [Header("Tilemap")]
+    public Tilemap tilemap;
+    public Vector3Int topLeft;
+    public TileBase emptyTile;
+    public TileBase waterTile;
+    public Tilemap foreground;
+    public TileBase waterForeground;
+    public TileBase electricityTile;
 
     // Start is called before the first frame update
     void Start()
     {
         InitializeGrid();
-//        StartCoroutine(PhysicsSim());
+        StartCoroutine(PhysicsSim());
         RenderGrid();
     }
 
@@ -39,44 +41,17 @@ public class PixelManager : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Space)) {
             for(uint i = 0; i < totalRow; ++i) {
                 for (uint j = 0; j < totalCol; ++j) {
-                    if (j > 122 && j < 128 && i + j < 200 && i + j > 145) {
+                    if (i < 10 && j > 125 && j < 130) {
+                        pixelArray[i, j].dir = PixelDirection.Right;
+                    }
+                    else if (i < 10 && j < 110 && j > 120) {
+                        pixelArray[i, j].dir = PixelDirection.Left;
+                    }
+                    else if (j > 122 && j < 128 && i + j < 200) {
                         pixelArray[i, j].dir = PixelDirection.Up;
                     }
-                    else if (j > 115 && j < 135 && i > 15)  {
+                    else if (j > 115 && j < 135)  {
                         pixelArray[i, j].dir = PixelDirection.None;
-                    }
-                }
-            }
-        }
-    }
-
-    void FixedUpdate()
-    {
-        int rand = Random.Range(0, 4);
-        if (rand / 2 == 0) {
-            for (uint i = 0; i < totalRow; i++) {
-                if (rand % 2 == 0) {
-                    for (uint j = 0; j < totalCol; j++) {
-                        PixelMovement(pixelArray[i, j]);
-                    }
-                }
-                else {
-                    for (uint j = totalCol - 1; j > 0; j--) {
-                        PixelMovement(pixelArray[i, j]);
-                    }
-                }
-            }
-        }
-        else {
-            for (uint i = totalRow - 1; i > 0; i--) {
-                if (rand % 2 == 0) {
-                    for (uint j = 0; j < totalCol; j++) {
-                        PixelMovement(pixelArray[i, j]);
-                    }
-                }
-                else {
-                    for (uint j = totalCol - 1; j > 0; j--) {
-                        PixelMovement(pixelArray[i, j]);
                     }
                 }
             }
@@ -86,28 +61,22 @@ public class PixelManager : MonoBehaviour
     public void InitializeGrid() {
         pixelArray = new Pixel[totalRow, totalCol];
         // Initialize pixel position
-        float xPos = topLeftPos.x + 0.5f * pixelSize;
-        float yPos = topLeftPos.y - 0.5f * pixelSize;
-        for(uint i = 0; i < totalRow; ++i) {
-            for (uint j = 0; j < totalCol; ++j) {
-                GameObject newPixel = Instantiate(pixelPrefab, new Vector3(xPos, yPos, transform.position.z), Quaternion.identity, gameObject.transform);
-                pixelArray[i, j] = newPixel.GetComponent<Pixel>();
-                xPos += pixelSize;
+        for(int i = 0; i < totalRow; ++i) {
+            for (int j = 0; j < totalCol; ++j) {
+                pixelArray[i, j] = new Pixel();
                 pixelArray[i, j].grid = this;
                 pixelArray[i, j].row = i;
                 pixelArray[i, j].col = j;
-                if (j % 2 == 0) {
+                pixelArray[i, j].movedThisFrame = false;
+                if (i > totalRow / 2) {
                     pixelArray[i, j].content = PixelContent.Water;
                 }
                 else {
                     pixelArray[i, j].content = PixelContent.Empty;
-
                 }
                 
                 pixelArray[i, j].dir = PixelDirection.Down;
             }
-            xPos = topLeftPos.x + 0.5f * pixelSize;
-            yPos -= pixelSize;
         }
     }
 
@@ -136,21 +105,7 @@ public class PixelManager : MonoBehaviour
             }
         }
 
-        if (!px.GetMovedThisFrame()) {
-
-            // Side movement
-            // int rand = Random.Range(0, 5);
-            // pxToSwap = GetPixelToSwap(px, (PixelDirection) rand);
-            // if (pxToSwap != null) {
-            //     switch (pxToSwap.content)
-            //     {
-            //         case PixelContent.Water:
-            //             break;
-            //         default:
-            //             SwapContent(px, pxToSwap);
-            //             break;
-            //     } 
-            // }
+        if (!px.movedThisFrame) {
             List<Pixel> emptyList = CheckEmpty(px);
             int rand = Random.Range(0, emptyList.Count + 1);
             if (rand != emptyList.Count) {
@@ -165,8 +120,8 @@ public class PixelManager : MonoBehaviour
         px2.content = tempContent;
         RenderPixel(px1);
         RenderPixel(px2);
-        px1.SetMovedThisFrame(true);
-        px2.SetMovedThisFrame(true);
+        px1.movedThisFrame = true;
+        px2.movedThisFrame = true;
     }
 
     #region Display
@@ -180,12 +135,18 @@ public class PixelManager : MonoBehaviour
     public void RenderPixel(Pixel px) {
         switch (px.content)
         {
-            case PixelContent.Water:
-                px.gameObject.GetComponent<SpriteRenderer>().color = waterColor;
-                break;
             case PixelContent.Empty:
-                px.gameObject.GetComponent<SpriteRenderer>().color = emptyColor;
-                break;        
+                tilemap.SetTile(new Vector3Int(topLeft.x + px.col, topLeft.y - px.row, topLeft.z), emptyTile);
+                foreground.SetTile(new Vector3Int(topLeft.x + px.col, topLeft.y - px.row, topLeft.z), emptyTile);
+                break;      
+            case PixelContent.Water:
+                tilemap.SetTile(new Vector3Int(topLeft.x + px.col, topLeft.y - px.row, topLeft.z), waterTile);
+                foreground.SetTile(new Vector3Int(topLeft.x + px.col, topLeft.y - px.row, topLeft.z), waterForeground);
+                break;
+            case PixelContent.Electricity:
+                tilemap.SetTile(new Vector3Int(topLeft.x + px.col, topLeft.y - px.row, topLeft.z), waterTile);
+                tilemap.SetTile(new Vector3Int(topLeft.x + px.col, topLeft.y - px.row, topLeft.z), electricityTile);
+                break;
         }
     }
     #endregion
@@ -193,9 +154,7 @@ public class PixelManager : MonoBehaviour
 
     IEnumerator PhysicsSim() {
         while (true) {
-            foreach(Pixel px in pixelArray) {
-                PixelMovement(px);
-            }
+            UpdatePixelPhysics();
             yield return new WaitForSeconds(simTimeStep);
         }
     }
@@ -244,6 +203,41 @@ public class PixelManager : MonoBehaviour
             returnList.Add(pixelArray[px.row, px.col + 1]);
         }
         return returnList;
+    }
+
+    void UpdatePixelPhysics() {
+        int rand = Random.Range(0, 4);
+        if (rand / 2 == 0) {
+            for (uint i = 0; i < totalRow; i++) {
+                if (rand % 2 == 0) {
+                    for (uint j = 0; j < totalCol; j++) {
+                        PixelMovement(pixelArray[i, j]);
+                    }
+                }
+                else {
+                    for (uint j = totalCol - 1; j > 0; j--) {
+                        PixelMovement(pixelArray[i, j]);
+                    }
+                }
+            }
+        }
+        else {
+            for (uint i = totalRow - 1; i > 0; i--) {
+                if (rand % 2 == 0) {
+                    for (uint j = 0; j < totalCol; j++) {
+                        PixelMovement(pixelArray[i, j]);
+                    }
+                }
+                else {
+                    for (uint j = totalCol - 1; j > 0; j--) {
+                        PixelMovement(pixelArray[i, j]);
+                    }
+                }
+            }
+        }
+        foreach (Pixel px in pixelArray) {
+            px.movedThisFrame = false;
+        }
     }
 
 }

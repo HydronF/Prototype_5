@@ -5,6 +5,7 @@ using UnityEngine;
 public enum PixelContent {
     Empty,
     Water,
+    Electricity,
 }
 
 public enum PixelDirection {
@@ -15,33 +16,12 @@ public enum PixelDirection {
     Right
 }
 
-public class Pixel : MonoBehaviour
+public class Pixel
 {
     public PixelManager grid;
     public PixelContent content;
-    public PixelDirection dir = PixelDirection.Down;
-    public uint row;
-    public uint col;
-    public bool movedThisFrame = false;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    void LateUpdate() {
-        movedThisFrame = false;
-    }
-
-    #region Getters and Setters
-    public bool GetMovedThisFrame() {return movedThisFrame;}
-    public void SetMovedThisFrame(bool val) {movedThisFrame = val;}
-    #endregion}
+    public PixelDirection dir;
+    public int row;
+    public int col;
+    public bool movedThisFrame;
 }
