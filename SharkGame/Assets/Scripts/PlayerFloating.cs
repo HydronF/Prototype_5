@@ -24,7 +24,7 @@ public class PlayerFloating : MonoBehaviour
             float floatForce = 2 - this.gameObject.transform.position.y;
             if (this.playerRigid.velocity.y > 0)
             {
-                playerRigid.AddForce(new Vector2(0, kFloatk * floatForce/3), ForceMode2D.Force);
+                playerRigid.AddForce(new Vector2(0, kFloatk * floatForce/2), ForceMode2D.Force);
                 print("Float");
             }
             else
