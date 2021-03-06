@@ -4,19 +4,33 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float speed;
-    Transform player;
+    PixelManager pixelManager;
     AudioSource hitSound;
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindWithTag("Player").transform;
+        pixelManager = FindObjectOfType<PixelManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    void FixedUpdate() {
+        PixelContent currPixel = pixelManager.GetContentWorld(transform.position);
+
+        if (currPixel == PixelContent.Empty) {
+            GetComponent<Rigidbody2D>().drag = 0.5f;
+        }
+        else if (currPixel == PixelContent.Water) {
+            GetComponent<Rigidbody2D>().drag = 3.0f;
+        }
+
+        if (Mathf.Abs(GetComponent<Rigidbody2D>().velocity.magnitude) < 0.4f) {
+            Destroy(gameObject);
+        }
     }
 
     void Explode() {
@@ -27,6 +41,9 @@ public class Bullet : MonoBehaviour
         if (other.tag == "Player") {
             Explode(); 
             Destroy(gameObject, 0.5f);
+        }
+        if (other.tag == "Border") {
+            Destroy(gameObject);
         }
     }
 }

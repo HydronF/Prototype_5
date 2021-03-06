@@ -18,7 +18,7 @@ public class Shark : MonoBehaviour
     protected bool canFly = false;
     protected Vector2 dir = Vector2.zero;
     protected SharkComponent attackComp;
-    protected float cooldownTimer;
+    public float cooldownTimer;
 
     // Start is called before the first frame update
     protected void Start()
@@ -95,8 +95,9 @@ public class Shark : MonoBehaviour
                 break;
             }
         }
-        if (!canFly && currPixel == PixelContent.Empty) {
+        if (currPixel == PixelContent.Empty) {
             GetComponent<Rigidbody2D>().drag = 0.5f;
+            if (canFly) GetComponent<Rigidbody2D>().AddForce(-Physics.gravity);
         }
         else if (currPixel == PixelContent.Water) {
             GetComponent<Rigidbody2D>().drag = 3.0f;

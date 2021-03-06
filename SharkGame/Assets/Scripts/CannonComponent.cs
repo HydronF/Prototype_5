@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class CannonComponent : SharkComponent
 {
-    public float shootingCooldown;
+    public const float shootingCooldown = 0.4f;
+    public const float startingForce = 12.0f;
     public GameObject bulletPrefab;
-    Transform playerTransform; 
+    public Transform bulletSpawn;
     // Start is called before the first frame update
     void Start()
     {
-        playerTransform = shark.player.transform;
+        shark.cooldown = shootingCooldown;
     }
 
     // Update is called once per frame
@@ -19,8 +20,16 @@ public class CannonComponent : SharkComponent
 
     }
 
-    IEnumerator ShootCannon() {
-        yield return new WaitForSeconds(shootingCooldown);
-        Instantiate(bulletPrefab, transform.position, transform.rotation);
+    public override void Attack() {
+        shark.cooldownTimer = shootingCooldown;
+        GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation, transform);
+        Vector2 dir = - new Vector2(transform.right.x, transform.right.y);
+        bullet.GetComponent<Rigidbody2D>().AddForce(startingForce * dir, ForceMode2D.Impulse);
     }
+
+    public override void SetMirror(bool toMirror) {
+        base.SetMirror(toMirror);
+        bulletSpawn.localPosition = new Vector3(bulletSpawn.localPosition.x, -bulletSpawn.localPosition.y, bulletSpawn.localPosition.z);
+    }
+
 }
