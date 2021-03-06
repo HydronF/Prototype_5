@@ -4,28 +4,16 @@ using UnityEngine;
 
 public class PlayerShark : Shark
 {
-    public GameObject CannonPrefab;
-
     // Start is called before the first frame update
-    new void Start() {
-        base.Start();
-        
-        SharkComponent cannon = Instantiate(CannonPrefab, transform).GetComponent<CannonComponent>();
-        cannon.shark = this;
-        NewAttack(cannon);
-    }
-    new void Update() {
-        base.Update();
+
+    void FixedUpdate()
+    {
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        dir = GetTargetDir(mousePos);
+        Vector2 dir = GetTargetDir(mousePos);
+        RotateTowards(dir);
+        MoveTowards(dir);
         if (Input.GetMouseButtonDown(0)) {
             Attack();
         }
-    }
-    
-    void FixedUpdate()
-    {
-        RotateTowards(dir);
-        MoveTowards(dir);
     }
 }

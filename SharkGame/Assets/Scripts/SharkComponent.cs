@@ -19,7 +19,7 @@ public class SharkComponent : MonoBehaviour
     }
 
     public void SetMirror(bool toMirror) {
-        GetComponent<SpriteRenderer>().flipY = toMirror;
+        GetComponent<SpriteRenderer>().flipX = toMirror;
     }
 
     public virtual void Attack() {
