@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SharkComponent : MonoBehaviour
+public class HItBox : MonoBehaviour
 {
-    public Shark shark;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,14 +13,6 @@ public class SharkComponent : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-    }
-
-    public void SetMirror(bool toMirror) {
-        GetComponent<SpriteRenderer>().flipX = toMirror;
-    }
-
-    public virtual void Attack() {
         
     }
 }

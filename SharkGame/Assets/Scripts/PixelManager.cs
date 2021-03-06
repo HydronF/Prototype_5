@@ -240,4 +240,16 @@ public class PixelManager : MonoBehaviour
         }
     }
 
+    public PixelContent GetContentWorld(Vector3 worldPos) {
+        if (tilemap.GetTile(tilemap.WorldToCell(worldPos)) == waterTile) {
+            return PixelContent.Water;
+        }
+        else if (tilemap.GetTile(tilemap.WorldToCell(worldPos)) == electricityTile) {
+            return PixelContent.Electricity;
+        }
+        else {
+            return PixelContent.Empty;
+        }
+    }
+
 }
