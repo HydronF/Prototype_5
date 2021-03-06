@@ -19,13 +19,14 @@ public class PlayerDiving : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Space))
         {
+            print("Jump");
             if (this.gameObject.transform.position.y < 0.05)
             {
-                //this.gameObject.transform.position -= new Vector3(0, diveMove, 0);
-                 playerRigid.AddForce(new Vector2(0,-diveMove),ForceMode2D.Force);
-                print("Jump");
+               // this.gameObject.transform.position -= new Vector3(0, diveMove, 0);
+                 playerRigid.AddForce(new Vector2(0,-diveMove),ForceMode2D.Impulse);
+           
             }
-            
+
         }
     }
 }
