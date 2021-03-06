@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class SharkComponent : MonoBehaviour
+public class UIManager : MonoBehaviour
 {
-    public Shark shark;
-    public float cooldown;
+    public Image cooldownBar;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,11 +18,7 @@ public class SharkComponent : MonoBehaviour
         
     }
 
-    public void SetMirror(bool toMirror) {
-        GetComponent<SpriteRenderer>().flipX = toMirror;
-    }
-
-    public virtual void Attack() {
-
+    public void UpdateCooldown(float currCooldown, float cooldown) {
+        cooldownBar.fillAmount = Mathf.Clamp((cooldown - currCooldown) / cooldown, 0.0f, 1.0f);
     }
 }

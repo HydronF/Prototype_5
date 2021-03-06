@@ -5,12 +5,6 @@ using UnityEngine;
 public class PlayerShark : Shark
 {
     // Start is called before the first frame update
-    void Start()
-    {
-        player = gameObject;
-        pixelManager = FindObjectOfType<PixelManager>();
-        sharkComponents = new List<SharkComponent>();
-    }
 
     void FixedUpdate()
     {
@@ -18,7 +12,7 @@ public class PlayerShark : Shark
         Vector2 dir = GetTargetDir(mousePos);
         RotateTowards(dir);
         MoveTowards(dir);
-        if (Input.GetMouseButtonUp(0)) {
+        if (Input.GetMouseButtonDown(0)) {
             Attack();
         }
     }

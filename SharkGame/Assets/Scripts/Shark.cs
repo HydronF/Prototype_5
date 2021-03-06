@@ -6,25 +6,35 @@ public class Shark : MonoBehaviour
 {
     public GameObject player;
     public GameObject meleeHitBox;
-    public PixelManager pixelManager;
+    protected PixelManager pixelManager;
+    protected UIManager uiManager;
     protected List<SharkComponent> sharkComponents;
+    public Transform waterProbes;
     public Vector2 buoyantForce;
     public float waterPropulsion;
     public float airPropulsion;
+    public float attackPropulsion;
+    public float cooldown;
     protected bool canFly = false;
     protected SharkComponent attackComp;
+    protected float cooldownTimer;
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.FindWithTag("Player");
+        uiManager = FindObjectOfType<UIManager>();
         pixelManager = FindObjectOfType<PixelManager>();
         sharkComponents = new List<SharkComponent>();
         attackComp = null;
+        meleeHitBox.SetActive(false);
+        cooldownTimer = 0.0f;
     }
 
     // Update is called once per frame
     void Update()
     {
+        cooldownTimer -= Time.deltaTime;
+        uiManager.UpdateCooldown(cooldownTimer, cooldown);
     }
 
     void FixedUpdate() {
@@ -48,6 +58,11 @@ public class Shark : MonoBehaviour
                     GetComponent<SpriteRenderer>().flipY = true;
                     comp.SetMirror(true);
                 }
+                meleeHitBox.transform.localPosition = new Vector3(
+                    meleeHitBox.transform.localPosition.x,
+                    -meleeHitBox.transform.localPosition.y,
+                    meleeHitBox.transform.localPosition.z
+                );
             }
         }
         else if (toTarget.x < 0.0f) {
@@ -57,6 +72,11 @@ public class Shark : MonoBehaviour
                     GetComponent<SpriteRenderer>().flipY = false;
                     comp.SetMirror(false);
                 }
+                meleeHitBox.transform.localPosition = new Vector3(
+                    meleeHitBox.transform.localPosition.x,
+                    -meleeHitBox.transform.localPosition.y,
+                    meleeHitBox.transform.localPosition.z
+                );
             }
         }
         float targetZ = Mathf.Atan2(toTarget.y, toTarget.x) * Mathf.Rad2Deg;
@@ -65,7 +85,16 @@ public class Shark : MonoBehaviour
     }
 
     protected void MoveTowards(Vector2 toTarget) {
-        PixelContent currPixel = pixelManager.GetContentWorld(transform.position);
+        PixelContent currPixel = PixelContent.Empty;
+        if (pixelManager.GetContentWorld(transform.position) == PixelContent.Water) {
+            currPixel = PixelContent.Water;
+        }
+        foreach (Transform child in waterProbes) {
+            if (pixelManager.GetContentWorld(child.position) == PixelContent.Water) {
+                currPixel = PixelContent.Water;
+                break;
+            }
+        }
         if (!canFly && currPixel == PixelContent.Empty) {
             GetComponent<Rigidbody2D>().drag = 0.5f;
         }
@@ -77,17 +106,23 @@ public class Shark : MonoBehaviour
     }
 
     protected void Attack() {
-        if (attackComp == null) {
-            StartCoroutine(MeleeAttack());
-        }
-        else {
-            attackComp.Attack();
+        if (cooldownTimer < 0.0f) {
+            cooldownTimer = cooldown;
+            if (attackComp == null) {
+                StartCoroutine(MeleeAttack());
+            }
+            else {
+                attackComp.Attack();
+            }
         }
     }
 
 
     IEnumerator MeleeAttack() {
         meleeHitBox.SetActive(true);
+        Vector2 forceDir = - new Vector2(transform.right.x, transform.right.y).normalized;
+        GetComponent<Rigidbody2D>().AddForce(forceDir * attackPropulsion, ForceMode2D.Impulse);
+        cooldownTimer = cooldown;
         yield return new WaitForSeconds(0.5f);
         meleeHitBox.SetActive(false);
     }
@@ -102,6 +137,7 @@ public class Shark : MonoBehaviour
             Destroy(attackComp.gameObject);
         }
         attackComp = newAttackComp;
+        cooldown = newAttackComp.cooldown;
     }
 
 }

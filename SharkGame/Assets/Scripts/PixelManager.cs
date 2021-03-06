@@ -28,9 +28,12 @@ public class PixelManager : MonoBehaviour
     public TileBase waterForeground;
     public TileBase electricityTile;
 
+    List<Transform> sharknadoTransforms;
+
     // Start is called before the first frame update
     void Start()
     {
+        sharknadoTransforms = new List<Transform>();
         InitializeGrid();
         StartCoroutine(PhysicsSim());
         RenderGrid();
@@ -39,24 +42,16 @@ public class PixelManager : MonoBehaviour
 
     void Update() {
         if (Input.GetKeyUp(KeyCode.Space)) {
-            for(uint i = 0; i < totalRow; ++i) {
-                for (uint j = 0; j < totalCol; ++j) {
-                    if (i < 10 && j > 125 && j < 130) {
-                        pixelArray[i, j].dir = PixelDirection.Right;
-                    }
-                    else if (i < 10 && j < 110 && j > 120) {
-                        pixelArray[i, j].dir = PixelDirection.Left;
-                    }
-                    else if (j > 122 && j < 128 && i + j < 200) {
-                        pixelArray[i, j].dir = PixelDirection.Up;
-                    }
-                    else if (j > 115 && j < 135)  {
-                        pixelArray[i, j].dir = PixelDirection.None;
-                    }
-                }
+            Transform t = GameObject.FindWithTag("Player").transform;
+            if (sharknadoTransforms.Exists(element => element == t)) {
+                StopTornado(t);
+            }
+            else {
+                StartTornado(t);
             }
         }
     }
+
 
     public void InitializeGrid() {
         pixelArray = new Pixel[totalRow, totalCol];
@@ -69,6 +64,9 @@ public class PixelManager : MonoBehaviour
                 pixelArray[i, j].col = j;
                 pixelArray[i, j].movedThisFrame = false;
                 if (i > totalRow / 2) {
+                    pixelArray[i, j].content = PixelContent.Water;
+                }
+                else if (i == totalRow / 2 && j % 2 == 0) {
                     pixelArray[i, j].content = PixelContent.Water;
                 }
                 else {
@@ -154,6 +152,7 @@ public class PixelManager : MonoBehaviour
 
     IEnumerator PhysicsSim() {
         while (true) {
+            HandleTornados();
             UpdatePixelPhysics();
             yield return new WaitForSeconds(simTimeStep);
         }
@@ -190,9 +189,9 @@ public class PixelManager : MonoBehaviour
 
     List<Pixel> CheckEmpty(Pixel px) {
         List<Pixel> returnList = new List<Pixel>();
-        if (px.row > 0 && pixelArray[px.row - 1, px.col].content == PixelContent.Empty) {
-            returnList.Add(pixelArray[px.row - 1, px.col]);
-        }
+        // if (px.row > 0 && pixelArray[px.row - 1, px.col].content == PixelContent.Empty) {
+        //     returnList.Add(pixelArray[px.row - 1, px.col]);
+        // }
         if (px.row < totalRow - 1 && pixelArray[px.row + 1, px.col].content == PixelContent.Empty) {
             returnList.Add(pixelArray[px.row + 1, px.col]);
         }
@@ -239,6 +238,11 @@ public class PixelManager : MonoBehaviour
             px.movedThisFrame = false;
         }
     }
+    public Vector2Int GetPixelPos(Vector3 worldPos) {
+        int x = tilemap.WorldToCell(worldPos).x - topLeft.x;
+        int y = tilemap.WorldToCell(worldPos).y - topLeft.y;
+        return new Vector2Int(x, y);
+    }
 
     public PixelContent GetContentWorld(Vector3 worldPos) {
         if (tilemap.GetTile(tilemap.WorldToCell(worldPos)) == waterTile) {
@@ -249,6 +253,78 @@ public class PixelManager : MonoBehaviour
         }
         else {
             return PixelContent.Empty;
+        }
+    }
+
+    public void StartTornado(Transform sharknado) {
+        sharknadoTransforms.Add(sharknado);
+    }
+
+    public void StopTornado(Transform sharknado) {
+        sharknadoTransforms.Remove(sharknado);
+    }
+
+
+    void HandleTornados() {
+        foreach (Pixel px in pixelArray) {
+            px.dir = PixelDirection.Down;
+        }
+        foreach (Transform sharknado in sharknadoTransforms) {
+            TornadoForceField(sharknado);
+        }
+    }
+
+    void TornadoForceField(Transform sharknado) {
+        // Figure out which column is the shark in
+        int sharkCol = GetPixelPos(sharknado.position).x;
+        int innerRange = 6;
+        int outerRange = 15;
+        int inOutCutoff = 10;
+        int bottomRow = (int) totalRow ;
+
+        // Middle: Force = Up
+        for(int j = sharkCol - innerRange; j <= sharkCol + innerRange; ++j) {
+            if (j >= 0 && j < totalCol) {
+                for (int i = 0; i < bottomRow; ++i) {
+                    pixelArray[i, j].dir = PixelDirection.Up;
+                }
+            }
+        }
+
+        // Left Low: Force = Right
+        for(int j = sharkCol - outerRange; j > sharkCol - innerRange; ++j) {
+            if (j >= 0 && j < totalCol) {
+                for (int i = inOutCutoff; i < bottomRow; ++i) {
+                    pixelArray[i, j].dir = PixelDirection.Right;
+                }
+            }
+        }
+
+        // Right Low: Force = Left
+        for(int j = sharkCol + innerRange; j < sharkCol + outerRange; ++j) {
+            if (j >= 0 && j < totalCol) {
+                for (int i = inOutCutoff; i < bottomRow; ++i) {
+                    pixelArray[i, j].dir = PixelDirection.Left;
+                }
+            }
+        }
+
+        // Left High: Force = Left
+        for(int j = sharkCol - outerRange; j > sharkCol - innerRange; ++j) {
+            if (j >= 0 && j < totalCol) {
+                for (int i = 0; i <= inOutCutoff; ++i) {
+                    pixelArray[i, j].dir = PixelDirection.Left;
+                }
+            }
+        }
+
+        // Right High: Force = Right
+        for(int j = sharkCol + innerRange + 1; j < sharkCol + outerRange; ++j) {
+            if (j >= 0 && j < totalCol) {
+                for (int i = 0; i <= inOutCutoff; ++i) {
+                    pixelArray[i, j].dir = PixelDirection.Right;
+                }
+            }
         }
     }
 
