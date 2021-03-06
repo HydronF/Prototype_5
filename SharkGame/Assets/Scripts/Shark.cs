@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Shark : MonoBehaviour
 {
-    public GameObject player;
+    Transform player;
     public GameObject meleeHitBox;
     protected PixelManager pixelManager;
     protected UIManager uiManager;
@@ -17,13 +17,15 @@ public class Shark : MonoBehaviour
     public float cooldown;
     protected bool canFly = false;
     protected Vector2 dir = Vector2.zero;
-    protected SharkComponent attackComp;
+    public SharkComponent attackComp;
     public float cooldownTimer;
+    public Color damageColor;
+    public bool immuneToElectricity = false;
 
     // Start is called before the first frame update
     protected void Start()
     {
-        player = GameObject.FindWithTag("Player");
+        player = GameObject.FindWithTag("Player").transform;
         uiManager = FindObjectOfType<UIManager>();
         pixelManager = FindObjectOfType<PixelManager>();
         sharkComponents = new List<SharkComponent>();
@@ -36,11 +38,10 @@ public class Shark : MonoBehaviour
     protected void Update()
     {
         cooldownTimer -= Time.deltaTime;
-        uiManager.UpdateCooldown(cooldownTimer, cooldown);
     }
 
     void FixedUpdate() {
-        dir = GetTargetDir(player.transform.position);
+        dir = GetTargetDir(player.position);
         RotateTowards(dir);
         MoveTowards(dir);
     }
@@ -97,7 +98,8 @@ public class Shark : MonoBehaviour
         }
         if (currPixel == PixelContent.Empty) {
             GetComponent<Rigidbody2D>().drag = 0.5f;
-            if (canFly) GetComponent<Rigidbody2D>().AddForce(-Physics.gravity);
+            GetComponent<Rigidbody2D>().AddForce(airPropulsion * toTarget);
+            if (canFly) GetComponent<Rigidbody2D>().AddForce(new Vector2(0.0f, 10.5f));
         }
         else if (currPixel == PixelContent.Water) {
             GetComponent<Rigidbody2D>().drag = 3.0f;
@@ -117,7 +119,6 @@ public class Shark : MonoBehaviour
             }
         }
     }
-
 
     IEnumerator MeleeAttack() {
         meleeHitBox.SetActive(true);
@@ -148,7 +149,16 @@ public class Shark : MonoBehaviour
 
     public void RemoveSharkComponent(SharkComponent comp) {
         sharkComponents.Remove(comp);
-        Destroy(attackComp.gameObject);
+    }
+
+    public virtual void TakeDamage() {
+
+    }
+
+    void OnTriggerEnter2D(Collider2D col) {
+        if (col.tag == "Electricity" && !immuneToElectricity) {
+            TakeDamage();
+        }
     }
 
 }

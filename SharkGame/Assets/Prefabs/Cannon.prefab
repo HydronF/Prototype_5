@@ -126,7 +126,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shark: {fileID: 0}
-  cooldown: 0
+  cooldown: 0.4
   bulletPrefab: {fileID: 7034155404607409696, guid: ea4640926a84e487a973da3f89f69ad9,
     type: 3}
   bulletSpawn: {fileID: 8571617152143689104}

@@ -4,20 +4,16 @@ using UnityEngine;
 
 public class CannonComponent : SharkComponent
 {
-    public const float shootingCooldown = 0.4f;
-    public const float startingForce = 12.0f;
+    public const float shootingCooldown = 0.6f;
+    public const float startingForce = 10.0f;
     public GameObject bulletPrefab;
     public Transform bulletSpawn;
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
+        shark.NewAttack(this);
         shark.cooldown = shootingCooldown;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        transform.localPosition = new Vector3(0.0f, 0.0f, -0.1f);
     }
 
     public override void Attack() {

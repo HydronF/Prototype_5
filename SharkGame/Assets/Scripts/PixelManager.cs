@@ -18,9 +18,13 @@ public class PixelManager : MonoBehaviour
     
     [Header("Physics")]
     public float simTimeStep;
+    public float electricityDuration;
+    float electricityTimer;
+    bool electricityPresent = false;
 
     [Header("Tilemap")]
-    public Tilemap tilemap;
+    public Tilemap waterMap;
+    public Tilemap electricityMap;
     public Vector3Int topLeft;
     public TileBase emptyTile;
     public TileBase waterTile;
@@ -29,6 +33,7 @@ public class PixelManager : MonoBehaviour
     public TileBase electricityTile;
 
     List<Transform> sharknadoTransforms;
+    bool[,] elecTravelled;
 
     // Start is called before the first frame update
     void Start()
@@ -37,18 +42,18 @@ public class PixelManager : MonoBehaviour
         InitializeGrid();
         StartCoroutine(PhysicsSim());
         RenderGrid();
+        elecTravelled = new bool[totalRow, totalCol];
+        for (int i = 0; i < totalRow; ++i) {
+            for (int j = 0; j < totalCol; ++j) {
+                elecTravelled[i, j] = false;
+            }
+        }
     }
 
 
     void Update() {
-        if (Input.GetKeyUp(KeyCode.Space)) {
-            Transform t = GameObject.FindWithTag("Player").transform;
-            if (sharknadoTransforms.Exists(element => element == t)) {
-                StopTornado(t);
-            }
-            else {
-                StartTornado(t);
-            }
+        if (electricityPresent) {
+            electricityTimer -= Time.deltaTime;
         }
     }
 
@@ -84,6 +89,9 @@ public class PixelManager : MonoBehaviour
             case PixelContent.Water:
                 WaterMovement(px);
                 break;
+            case PixelContent.Electricity:
+                ElectricityMovement(px);
+                break;
             case PixelContent.Empty:
                 break;
         }
@@ -96,7 +104,9 @@ public class PixelManager : MonoBehaviour
             switch (pxToSwap.content)
             {
                 case PixelContent.Water:
-                    break;                
+                    break;
+                case PixelContent.Electricity:
+                    break;         
                 default:
                     SwapContent(px, pxToSwap);
                     break;
@@ -109,6 +119,51 @@ public class PixelManager : MonoBehaviour
             if (rand != emptyList.Count) {
                 SwapContent(px, emptyList[rand]);
             }
+        }
+    }
+
+    void ElectricityMovement(Pixel px)
+    {
+        for (int i = 0; i < 5; ++i) {
+            ElectricityPass(px);
+        }
+    }
+
+    void ElectricityPass(Pixel px) {
+        if (px.row <= 0 || px.col <= 0 || px.row >= totalRow - 1 || px.col >= totalCol - 1
+            || elecTravelled[px.row, px.col]) {
+            return;
+        }
+        List<Pixel> potentialNext = new List<Pixel>();
+        switch (px.dir)
+        {
+            case PixelDirection.Up:
+                if (pixelArray[px.row - 1, px.col].content == PixelContent.Water) { potentialNext.Add(pixelArray[px.row - 1, px.col]); }
+                if (pixelArray[px.row, px.col - 1].content == PixelContent.Water) { potentialNext.Add(pixelArray[px.row, px.col - 1]); }
+                if (pixelArray[px.row, px.col + 1].content == PixelContent.Water) { potentialNext.Add(pixelArray[px.row, px.col + 1]); }
+                break;
+            case PixelDirection.Down:
+                if (pixelArray[px.row + 1, px.col].content == PixelContent.Water) { potentialNext.Add(pixelArray[px.row + 1, px.col]); }
+                if (pixelArray[px.row, px.col - 1].content == PixelContent.Water) { potentialNext.Add(pixelArray[px.row, px.col - 1]); }
+                if (pixelArray[px.row, px.col + 1].content == PixelContent.Water) { potentialNext.Add(pixelArray[px.row, px.col + 1]); }
+                break;
+            case PixelDirection.Left:
+                if (pixelArray[px.row - 1, px.col].content == PixelContent.Water) { potentialNext.Add(pixelArray[px.row - 1, px.col]); }
+                if (pixelArray[px.row + 1, px.col].content == PixelContent.Water) { potentialNext.Add(pixelArray[px.row + 1, px.col]); }
+                if (pixelArray[px.row, px.col - 1].content == PixelContent.Water) { potentialNext.Add(pixelArray[px.row, px.col - 1]); }
+                break;
+            case PixelDirection.Right:
+                if (pixelArray[px.row - 1, px.col].content == PixelContent.Water) { potentialNext.Add(pixelArray[px.row - 1, px.col]); }
+                if (pixelArray[px.row + 1, px.col].content == PixelContent.Water) { potentialNext.Add(pixelArray[px.row + 1, px.col]); }
+                if (pixelArray[px.row, px.col - 1].content == PixelContent.Water) { potentialNext.Add(pixelArray[px.row, px.col + 1]); }
+                break;
+            default:
+                break;
+        }
+        if (potentialNext.Count > 0) {
+            Pixel nextPx = potentialNext[Random.Range(0, potentialNext.Count)];
+            SetElectricity(nextPx, px.dir);
+            elecTravelled[px.row, px.col] = true;
         }
     }
 
@@ -131,19 +186,21 @@ public class PixelManager : MonoBehaviour
     }
 
     public void RenderPixel(Pixel px) {
+        Vector3Int pos = new Vector3Int(topLeft.x + px.col, topLeft.y - px.row, topLeft.z);
         switch (px.content)
         {
             case PixelContent.Empty:
-                tilemap.SetTile(new Vector3Int(topLeft.x + px.col, topLeft.y - px.row, topLeft.z), emptyTile);
-                foreground.SetTile(new Vector3Int(topLeft.x + px.col, topLeft.y - px.row, topLeft.z), emptyTile);
+                waterMap.SetTile(pos, emptyTile);
+                foreground.SetTile(pos, emptyTile);
+                electricityMap.SetTile(pos, null);
                 break;      
             case PixelContent.Water:
-                tilemap.SetTile(new Vector3Int(topLeft.x + px.col, topLeft.y - px.row, topLeft.z), waterTile);
-                foreground.SetTile(new Vector3Int(topLeft.x + px.col, topLeft.y - px.row, topLeft.z), waterForeground);
+                waterMap.SetTile(pos, waterTile);
+                foreground.SetTile(pos, waterForeground);
+                electricityMap.SetTile(pos, null);
                 break;
             case PixelContent.Electricity:
-                tilemap.SetTile(new Vector3Int(topLeft.x + px.col, topLeft.y - px.row, topLeft.z), waterTile);
-                tilemap.SetTile(new Vector3Int(topLeft.x + px.col, topLeft.y - px.row, topLeft.z), electricityTile);
+                electricityMap.SetTile(pos, electricityTile);
                 break;
         }
     }
@@ -152,6 +209,9 @@ public class PixelManager : MonoBehaviour
 
     IEnumerator PhysicsSim() {
         while (true) {
+            if (electricityPresent && electricityTimer < 0.0f) {
+                    ClearElectricity();
+            }
             HandleTornados();
             UpdatePixelPhysics();
             yield return new WaitForSeconds(simTimeStep);
@@ -238,18 +298,18 @@ public class PixelManager : MonoBehaviour
             px.movedThisFrame = false;
         }
     }
-    public Vector2Int GetPixelPos(Vector3 worldPos) {
-        int x = tilemap.WorldToCell(worldPos).x - topLeft.x;
-        int y = tilemap.WorldToCell(worldPos).y - topLeft.y;
+    public Vector2Int GetPixelAtPos(Vector3 worldPos) {
+        int x = topLeft.y - waterMap.WorldToCell(worldPos).y;
+        int y = waterMap.WorldToCell(worldPos).x - topLeft.x;
         return new Vector2Int(x, y);
     }
 
     public PixelContent GetContentWorld(Vector3 worldPos) {
-        if (tilemap.GetTile(tilemap.WorldToCell(worldPos)) == waterTile) {
-            return PixelContent.Water;
-        }
-        else if (tilemap.GetTile(tilemap.WorldToCell(worldPos)) == electricityTile) {
+        if (electricityMap.GetTile(waterMap.WorldToCell(worldPos)) == electricityTile) {
             return PixelContent.Electricity;
+        }
+        else if (waterMap.GetTile(waterMap.WorldToCell(worldPos)) == waterTile) {
+            return PixelContent.Water;
         }
         else {
             return PixelContent.Empty;
@@ -267,7 +327,9 @@ public class PixelManager : MonoBehaviour
 
     void HandleTornados() {
         foreach (Pixel px in pixelArray) {
-            px.dir = PixelDirection.Down;
+            if (px.content == PixelContent.Water) {
+                px.dir = PixelDirection.Down;
+            }
         }
         foreach (Transform sharknado in sharknadoTransforms) {
             TornadoForceField(sharknado);
@@ -276,7 +338,7 @@ public class PixelManager : MonoBehaviour
 
     void TornadoForceField(Transform sharknado) {
         // Figure out which column is the shark in
-        int sharkCol = GetPixelPos(sharknado.position).x;
+        int sharkCol = GetPixelAtPos(sharknado.position).y;
         int innerRange = 6;
         int outerRange = 15;
         int inOutCutoff = 10;
@@ -328,4 +390,52 @@ public class PixelManager : MonoBehaviour
         }
     }
 
+    public void ActivateElectricity(Vector3 worldPos) {
+        electricityPresent = true;
+        electricityTimer = electricityDuration;
+        Vector2Int center = GetPixelAtPos(worldPos);
+        SetElectricity(center.x - 3, center.y, PixelDirection.Up);
+        SetElectricity(center.x + 3, center.y, PixelDirection.Down);
+        SetElectricity(center.x, center.y - 3, PixelDirection.Left);
+        SetElectricity(center.x, center.y + 3, PixelDirection.Right);
+        SetElectricity(center.x - 2, center.y + 2, PixelDirection.Up);
+        SetElectricity(center.x + 2, center.y - 2, PixelDirection.Down);
+        SetElectricity(center.x - 2, center.y - 2, PixelDirection.Left);
+        SetElectricity(center.x + 2, center.y + 2, PixelDirection.Right);
+
+    }
+
+    void SetElectricity(int i, int j, PixelDirection dir) {
+        if (i > 0 && i < totalRow && j > 0 && j < totalCol) {
+            pixelArray[i, j].content = PixelContent.Electricity;
+            pixelArray[i, j].dir = dir;
+            RenderPixel(pixelArray[i, j]);
+        }
+    }
+
+    void SetElectricity(Pixel px, PixelDirection dir) {
+            px.content = PixelContent.Electricity;
+            px.dir = dir;
+            RenderPixel(px);
+    }
+
+
+    public void ClearElectricity() {
+        foreach (Pixel px in pixelArray) {
+            if (px.content == PixelContent.Electricity) {
+                px.content = PixelContent.Water;
+                px.dir = PixelDirection.Down;
+                RenderPixel(px);
+            }
+        }
+        electricityPresent = false;
+        for (int i = 0; i < totalRow; ++i) {
+            for (int j = 0; j < totalCol; ++j) {
+                elecTravelled[i, j] = false;
+            }
+        }
+
+        Debug.Log("ElectricityCleared");
+    }   
 }
+

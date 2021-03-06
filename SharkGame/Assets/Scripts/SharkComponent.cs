@@ -7,9 +7,9 @@ public class SharkComponent : MonoBehaviour
     public Shark shark;
     public float cooldown;
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
-        
+        shark.AddSharkComponent(this);
     }
 
     // Update is called once per frame
@@ -24,5 +24,11 @@ public class SharkComponent : MonoBehaviour
 
     public virtual void Attack() {
 
+    }
+
+    protected virtual void OnDestroy() {
+        if (shark != null) {
+            shark.RemoveSharkComponent(this);
+        }
     }
 }

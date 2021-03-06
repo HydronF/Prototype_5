@@ -5,8 +5,10 @@ using UnityEngine;
 public class WingComponent : SharkComponent
 {
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         shark.ActivateFlying();
+        transform.localPosition = new Vector3(0.0f, 0.0f, -0.3f);
     }
 }

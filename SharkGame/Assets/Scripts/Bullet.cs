@@ -10,6 +10,7 @@ public class Bullet : MonoBehaviour
     void Start()
     {
         pixelManager = FindObjectOfType<PixelManager>();
+        hitSound = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -38,11 +39,12 @@ public class Bullet : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D other) {
-        if (other.tag == "Player") {
+        if (other.tag == "Player" || other.tag == "Enemy") {
             Explode(); 
-            Destroy(gameObject, 0.5f);
+            other.GetComponent<Shark>().TakeDamage();
+            Destroy(gameObject);
         }
-        if (other.tag == "Border") {
+        else if (other.tag == "Border") {
             Destroy(gameObject);
         }
     }
