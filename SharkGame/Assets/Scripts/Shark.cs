@@ -8,7 +8,7 @@ public class Shark : MonoBehaviour
     public GameObject meleeHitBox;
     protected PixelManager pixelManager;
     protected UIManager uiManager;
-    protected List<SharkComponent> sharkComponents;
+    public List<SharkComponent> sharkComponents;
     public Transform waterProbes;
     public Vector2 buoyantForce;
     public float waterPropulsion;
@@ -16,10 +16,12 @@ public class Shark : MonoBehaviour
     public float attackPropulsion;
     public float cooldown;
     protected bool canFly = false;
+    protected Vector2 dir = Vector2.zero;
     protected SharkComponent attackComp;
     protected float cooldownTimer;
+
     // Start is called before the first frame update
-    void Start()
+    protected void Start()
     {
         player = GameObject.FindWithTag("Player");
         uiManager = FindObjectOfType<UIManager>();
@@ -31,14 +33,14 @@ public class Shark : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected void Update()
     {
         cooldownTimer -= Time.deltaTime;
         uiManager.UpdateCooldown(cooldownTimer, cooldown);
     }
 
     void FixedUpdate() {
-        Vector2 dir = GetTargetDir(player.transform.position);
+        dir = GetTargetDir(player.transform.position);
         RotateTowards(dir);
         MoveTowards(dir);
     }
@@ -55,7 +57,6 @@ public class Shark : MonoBehaviour
             if (!GetComponent<SpriteRenderer>().flipY) {
                 GetComponent<SpriteRenderer>().flipY = true;
                 foreach (SharkComponent comp in sharkComponents) {
-                    GetComponent<SpriteRenderer>().flipY = true;
                     comp.SetMirror(true);
                 }
                 meleeHitBox.transform.localPosition = new Vector3(
@@ -69,7 +70,6 @@ public class Shark : MonoBehaviour
             if (GetComponent<SpriteRenderer>().flipY) {
                 GetComponent<SpriteRenderer>().flipY = false;
                 foreach (SharkComponent comp in sharkComponents) {
-                    GetComponent<SpriteRenderer>().flipY = false;
                     comp.SetMirror(false);
                 }
                 meleeHitBox.transform.localPosition = new Vector3(
@@ -136,8 +136,18 @@ public class Shark : MonoBehaviour
             sharkComponents.Remove(attackComp);
             Destroy(attackComp.gameObject);
         }
+        sharkComponents.Add(newAttackComp);
         attackComp = newAttackComp;
         cooldown = newAttackComp.cooldown;
+    }
+
+    public void AddSharkComponent(SharkComponent comp) {
+        sharkComponents.Add(comp);
+    }
+
+    public void RemoveSharkComponent(SharkComponent comp) {
+        sharkComponents.Remove(comp);
+        Destroy(attackComp.gameObject);
     }
 
 }
