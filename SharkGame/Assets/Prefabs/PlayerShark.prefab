@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4312311915839993730}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WaterProbe (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,7 +39,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4312311915863301937}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WaterProbes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4312311916791968390}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WaterProbe (0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 4312311917315025688}
   - component: {fileID: 4312311917315025690}
   - component: {fileID: 4312311917315025689}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PlayerShark
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -204,7 +204,7 @@ CapsuleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4312311917315025683}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -270,10 +270,15 @@ MonoBehaviour:
   airPropulsion: 3
   attackPropulsion: 4
   cooldown: 1
+  attackComp: {fileID: 0}
   cooldownTimer: 0
-  damageColor: {r: 0, g: 0, b: 0, a: 0}
-  CannonPrefab: {fileID: 8571617152883880066, guid: 67862180f8695449b8a1e05c5b0cb42a,
-    type: 3}
+  damageColor: {r: 1, g: 0.25, b: 0.25, a: 1}
+  immuneToElectricity: 0
+  componentPrefabs:
+  - {fileID: 8571617152883880066, guid: 67862180f8695449b8a1e05c5b0cb42a, type: 3}
+  - {fileID: 6729175041799680331, guid: c6014a3d18d634fde925056338a78f3d, type: 3}
+  - {fileID: 3437566926027816183, guid: 8aaa0104fc600455abe5ecf23c708bb3, type: 3}
+  - {fileID: 1542116332161041313, guid: aafcf17d724e04bf98d031b14e15e52f, type: 3}
 --- !u!1 &4312311917375903210
 GameObject:
   m_ObjectHideFlags: 0
@@ -283,7 +288,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4312311917375903211}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WaterProbe (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -316,13 +321,13 @@ GameObject:
   - component: {fileID: 4312311917589829219}
   - component: {fileID: 4312311917589829220}
   - component: {fileID: 654595521}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: MeleeHitBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4312311917589829217
 Transform:
   m_ObjectHideFlags: 0
@@ -416,7 +421,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.075, y: 0.075}
+    oldSize: {x: 0.06666667, y: 0.06666667}
     newSize: {x: 0.16, y: 0.16}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

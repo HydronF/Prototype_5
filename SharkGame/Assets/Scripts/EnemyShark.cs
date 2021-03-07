@@ -19,6 +19,9 @@ public class EnemyShark : Shark
 
     public void Die() {
         spawner.RemoveShark(this);
+        if (sharkComponents.Count > 0 && Random.Range(0, 3) == 0) {
+            sharkComponents[Random.Range(0, sharkComponents.Count)].Drop();
+        }
         Destroy(gameObject);
     }
 

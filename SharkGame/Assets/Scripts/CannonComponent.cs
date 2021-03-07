@@ -11,6 +11,7 @@ public class CannonComponent : SharkComponent
     // Start is called before the first frame update
     protected override void Start()
     {
+        base.Start();
         shark.NewAttack(this);
         shark.cooldown = shootingCooldown;
         transform.localPosition = new Vector3(0.0f, 0.0f, -0.1f);

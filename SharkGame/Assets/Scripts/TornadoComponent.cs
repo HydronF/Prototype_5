@@ -8,12 +8,12 @@ public class TornadoComponent : SharkComponent
     protected override void Start()
     {
         base.Start();
-        FindObjectOfType<PixelManager>().StartTornado(transform);
+        pixelManager.StartTornado(transform);
         transform.localPosition = new Vector3(0.0f, 0.0f, 0.1f);
     }
 
     protected override void OnDestroy() {
         base.OnDestroy();
-        FindObjectOfType<PixelManager>().StopTornado(transform);
+        pixelManager.StopTornado(transform);
     }
 }

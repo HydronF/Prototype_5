@@ -97,7 +97,7 @@ public class Shark : MonoBehaviour
             }
         }
         if (currPixel == PixelContent.Empty) {
-            GetComponent<Rigidbody2D>().drag = 0.5f;
+            GetComponent<Rigidbody2D>().drag = 0.3f;
             GetComponent<Rigidbody2D>().AddForce(airPropulsion * toTarget);
             if (canFly) GetComponent<Rigidbody2D>().AddForce(new Vector2(0.0f, 10.5f));
         }
@@ -138,7 +138,6 @@ public class Shark : MonoBehaviour
             sharkComponents.Remove(attackComp);
             Destroy(attackComp.gameObject);
         }
-        sharkComponents.Add(newAttackComp);
         attackComp = newAttackComp;
         cooldown = newAttackComp.cooldown;
     }

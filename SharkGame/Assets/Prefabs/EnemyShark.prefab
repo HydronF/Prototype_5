@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1854588813506335429}
   - component: {fileID: 5948920307215306210}
   - component: {fileID: 6015519986256963678}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: MeleeHitBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -112,7 +112,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.075, y: 0.075}
+    oldSize: {x: 0.06666667, y: 0.06666667}
     newSize: {x: 0.16, y: 0.16}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 7251100482935521062}
   - component: {fileID: 1870671152395607779}
   - component: {fileID: 2469195334303683647}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: EnemyShark
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -298,8 +298,10 @@ MonoBehaviour:
   airPropulsion: 1
   attackPropulsion: 2
   cooldown: 1
+  attackComp: {fileID: 0}
   cooldownTimer: 0
   damageColor: {r: 0, g: 0, b: 0, a: 0}
+  immuneToElectricity: 0
   spawner: {fileID: 0}
 --- !u!1 &3250928268694359536
 GameObject:
@@ -310,7 +312,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6635969205874490391}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WaterProbe (0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -340,7 +342,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8166004525136398112}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WaterProbe (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -370,7 +372,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3761167949067148851}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WaterProbe (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -400,7 +402,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4099459732777099954}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WaterProbes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
