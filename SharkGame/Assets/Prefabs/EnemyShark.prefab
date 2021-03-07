@@ -249,7 +249,7 @@ MonoBehaviour:
   attackPropulsion: 2
   maxHealth: 15
   meleeDamage: 10
-  bulletDamage: 5
+  bulletDamage: 8
   electricityDamage: 20
   immuneToElectricity: 0
   damageColor: {r: 0.764151, g: 0.046858337, b: 0.046858337, a: 1}

@@ -154,25 +154,25 @@ MonoBehaviour:
   - sharkCount: 1
     sharkComponents: []
     spawnGap: 1
-  - sharkCount: 5
+  - sharkCount: 6
     sharkComponents:
     - {fileID: 8571617152883880066, guid: 67862180f8695449b8a1e05c5b0cb42a, type: 3}
     - {fileID: 3437566926027816183, guid: 8aaa0104fc600455abe5ecf23c708bb3, type: 3}
     spawnGap: 4
-  - sharkCount: 10
+  - sharkCount: 16
     sharkComponents:
     - {fileID: 8571617152883880066, guid: 67862180f8695449b8a1e05c5b0cb42a, type: 3}
     - {fileID: 1542116332161041313, guid: aafcf17d724e04bf98d031b14e15e52f, type: 3}
     - {fileID: 6729175041799680331, guid: c6014a3d18d634fde925056338a78f3d, type: 3}
     - {fileID: 3437566926027816183, guid: 8aaa0104fc600455abe5ecf23c708bb3, type: 3}
-    spawnGap: 2
+    spawnGap: 3
   - sharkCount: -1
     sharkComponents:
     - {fileID: 8571617152883880066, guid: 67862180f8695449b8a1e05c5b0cb42a, type: 3}
     - {fileID: 1542116332161041313, guid: aafcf17d724e04bf98d031b14e15e52f, type: 3}
     - {fileID: 6729175041799680331, guid: c6014a3d18d634fde925056338a78f3d, type: 3}
     - {fileID: 3437566926027816183, guid: 8aaa0104fc600455abe5ecf23c708bb3, type: 3}
-    spawnGap: 1
+    spawnGap: 2
   sharkPrefab: {fileID: 2881093863502631788, guid: a61523d46aed9437fb8f682fc00447c7,
     type: 3}
 --- !u!4 &31429869
@@ -1301,7 +1301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd3cac21918f74fd79e5b6f7e491cc61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerHealthBar: {fileID: 0}
+  playerHealthBar: {fileID: 371120414}
   cooldownBar: {fileID: 1401312690}
   promptPrefab: {fileID: 6591231256493685798, guid: ae543795a36b74401a6c880072a3092a,
     type: 3}

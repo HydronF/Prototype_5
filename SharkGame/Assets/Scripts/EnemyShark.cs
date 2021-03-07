@@ -8,7 +8,7 @@ public class EnemyShark : Shark
     new void Update()
     {
         base.Update();
-        if (cooldownTimer < -cooldown) {
+        if (cooldownTimer < - 2 * cooldown) {
             Attack();
         }
     }
