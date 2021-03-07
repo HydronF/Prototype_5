@@ -171,7 +171,7 @@ public class PixelManager : MonoBehaviour
             SetElectricity(nextPx, px.dir);
             elecTravelled[px.row, px.col] = true;
         }
-        else if (airList.Count > 0 && Random.Range(0, 7) == 0) {
+        else if (airList.Count > 0 && Random.Range(0.0f, 1.0f) < 0.12f) {
             Pixel nextPx = airList[Random.Range(0, airList.Count)];
             SetElectricity(nextPx, px.dir);
             elecTravelled[px.row, px.col] = true;

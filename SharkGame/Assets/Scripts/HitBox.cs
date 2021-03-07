@@ -8,8 +8,7 @@ public class HitBox : MonoBehaviour
         if (other.transform.tag != transform.parent.tag) {
             Shark shark = other.GetComponent<Shark>();
             if (shark != null) {
-                shark.TakeDamage();
-                Debug.Log("damage!");
+                shark.TakeDamage(AttackType.Melee);
             }
         }
     }

@@ -6,7 +6,6 @@ public class SharkComponent : MonoBehaviour
 {
     public Shark shark;
     public float cooldown;
-    public GameObject pickupSprite;
     public GameObject dropHandler;
     protected PixelManager pixelManager;
     bool dropped = false;
@@ -14,7 +13,6 @@ public class SharkComponent : MonoBehaviour
     protected virtual void Start()
     {
         shark.AddSharkComponent(this);
-        pickupSprite.SetActive(false);
         pixelManager = FindObjectOfType<PixelManager>();
         GetComponent<Rigidbody2D>().isKinematic = true;
         GetComponent<Collider2D>().enabled = false;
@@ -54,7 +52,6 @@ public class SharkComponent : MonoBehaviour
         dropped = true;
         shark = null;
         var newDrop = Instantiate(dropHandler, transform.position, transform.rotation, transform).GetComponent<DropHandler>();
-        newDrop.pickupSprite = pickupSprite;
         transform.SetParent(transform.parent.parent);
         GetComponent<Rigidbody2D>().isKinematic = false;
         GetComponent<Collider2D>().enabled = true;

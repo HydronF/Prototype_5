@@ -8,6 +8,11 @@ public class PlayerShark : Shark
     SharkComponent potentialPickup;
     int pickupType = -1;
 
+    new void Start() {
+        base.Start();
+        uiManager.UpdatePlayerHealth(currHealth, maxHealth);
+    }
+
     new void Update() {
         base.Update();
         uiManager.UpdateCooldown(cooldownTimer, cooldown);
@@ -21,6 +26,11 @@ public class PlayerShark : Shark
                 Pickup();
             }
         }
+        if (Input.GetMouseButtonDown(2)) {
+            if (attackComp) {
+                NewAttack(null);
+            }
+        }
     }
     
     void FixedUpdate()
@@ -29,15 +39,10 @@ public class PlayerShark : Shark
         MoveTowards(dir);
     }
 
-    public override void TakeDamage()
+    public override void TakeDamage(AttackType attackType)
     {
-        StartCoroutine(DamageAnim());
-    }
-
-    IEnumerator DamageAnim() {
-        GetComponent<SpriteRenderer>().color = damageColor;
-        yield return new WaitForSeconds(0.5f);
-        GetComponent<SpriteRenderer>().color = Color.white;
+        base.TakeDamage(attackType);
+        uiManager.UpdatePlayerHealth(currHealth, maxHealth);
     }
 
     public void Pickup() {
@@ -61,4 +66,9 @@ public class PlayerShark : Shark
     public void RemovePotentialPickup() {
         potentialPickup = null;
     }
+
+    public override void Die() {
+        uiManager.DeathScreen();
+    }
+
 }

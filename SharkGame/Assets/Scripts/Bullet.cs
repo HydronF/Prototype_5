@@ -41,7 +41,7 @@ public class Bullet : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other) {
         if (other.tag == "Player" || other.tag == "Enemy") {
             Explode(); 
-            other.GetComponent<Shark>().TakeDamage();
+            other.GetComponent<Shark>().TakeDamage(AttackType.Bullet);
             Destroy(gameObject);
         }
         else if (other.tag == "Border") {

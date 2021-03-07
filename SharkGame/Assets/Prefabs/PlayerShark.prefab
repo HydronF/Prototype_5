@@ -104,8 +104,6 @@ GameObject:
   - component: {fileID: 4312311917315025685}
   - component: {fileID: 4312311917315025684}
   - component: {fileID: 4312311917315025686}
-  - component: {fileID: 4312311917315025687}
-  - component: {fileID: 4312311917315025688}
   - component: {fileID: 4312311917315025690}
   - component: {fileID: 4312311917315025689}
   m_Layer: 10
@@ -194,41 +192,9 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.0032669445, y: 0.1133519}
-  m_Size: {x: 0.9547305, y: 0.30664793}
+  m_Offset: {x: 0.0044601974, y: 0.094455115}
+  m_Size: {x: 0.77193373, y: 0.28019387}
   m_Direction: 1
---- !u!70 &4312311917315025687
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4312311917315025683}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.42218244, y: 0.15589568}
-  m_Size: {x: 0.14270271, y: 0.4005658}
-  m_Direction: 0
---- !u!70 &4312311917315025688
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4312311917315025683}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.007643743, y: 0.1456381}
-  m_Size: {x: 0.1712612, y: 0.62431484}
-  m_Direction: 0
 --- !u!50 &4312311917315025690
 Rigidbody2D:
   serializedVersion: 4
@@ -262,18 +228,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62764e701cae24d9a9352dcc8d28bbe3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meleeHitBox: {fileID: 4312311917589829216}
   sharkComponents: []
   waterProbes: {fileID: 4312311915863301937}
+  meleeHitBox: {fileID: 4312311917589829216}
   buoyantForce: {x: 0, y: 10}
-  waterPropulsion: 5
-  airPropulsion: 3
-  attackPropulsion: 4
+  waterPropulsion: 6
+  airPropulsion: 4
+  attackPropulsion: 5
+  maxHealth: 300
+  meleeDamage: 10
+  bulletDamage: 5
+  electricityDamage: 20
+  immuneToElectricity: 0
+  damageColor: {r: 0.8396226, g: 0.04356533, b: 0.04356533, a: 1}
   cooldown: 1
   attackComp: {fileID: 0}
   cooldownTimer: 0
-  damageColor: {r: 1, g: 0.25, b: 0.25, a: 1}
-  immuneToElectricity: 0
   componentPrefabs:
   - {fileID: 8571617152883880066, guid: 67862180f8695449b8a1e05c5b0cb42a, type: 3}
   - {fileID: 6729175041799680331, guid: c6014a3d18d634fde925056338a78f3d, type: 3}
@@ -327,7 +297,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4312311917589829217
 Transform:
   m_ObjectHideFlags: 0
@@ -337,7 +307,7 @@ Transform:
   m_GameObject: {fileID: 4312311917589829216}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.388, y: 0.101, z: -0.7}
-  m_LocalScale: {x: 3.6, y: 3.6, z: 3}
+  m_LocalScale: {x: 4, y: 4, z: 3}
   m_Children: []
   m_Father: {fileID: 4312311917315025685}
   m_RootOrder: 0
@@ -421,12 +391,12 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.06666667, y: 0.06666667}
+    oldSize: {x: 0.05, y: 0.05}
     newSize: {x: 0.16, y: 0.16}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.09, y: 0.09}
+  m_Size: {x: 0.06, y: 0.06}
   m_EdgeRadius: 0

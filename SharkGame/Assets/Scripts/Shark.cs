@@ -2,25 +2,45 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum AttackType {
+    Melee,
+    Bullet,
+    Electricity,
+}
+
 public class Shark : MonoBehaviour
-{
-    Transform player;
+{   
+    [Header("Components")]
+    public List<SharkComponent> sharkComponents;
+    public Transform waterProbes;
+
+    [Header("References")]
     public GameObject meleeHitBox;
     protected PixelManager pixelManager;
     protected UIManager uiManager;
-    public List<SharkComponent> sharkComponents;
-    public Transform waterProbes;
+    Transform player;
+
+    [Header("Movement and Physics")]
     public Vector2 buoyantForce;
     public float waterPropulsion;
     public float airPropulsion;
     public float attackPropulsion;
-    public float cooldown;
     protected bool canFly = false;
     protected Vector2 dir = Vector2.zero;
+
+    [Header("Health and Damage")]
+    public int maxHealth;
+    protected int currHealth;
+    public int meleeDamage;
+    public int bulletDamage;
+    public int electricityDamage;
+    public bool immuneToElectricity = false;
+    public Color damageColor;
+
+    [Header("Attack")]
+    public float cooldown;
     public SharkComponent attackComp;
     public float cooldownTimer;
-    public Color damageColor;
-    public bool immuneToElectricity = false;
 
     // Start is called before the first frame update
     protected void Start()
@@ -32,6 +52,7 @@ public class Shark : MonoBehaviour
         attackComp = null;
         meleeHitBox.SetActive(false);
         cooldownTimer = 0.0f;
+        currHealth = maxHealth;
     }
 
     // Update is called once per frame
@@ -139,7 +160,9 @@ public class Shark : MonoBehaviour
             Destroy(attackComp.gameObject);
         }
         attackComp = newAttackComp;
-        cooldown = newAttackComp.cooldown;
+        if (newAttackComp != null) {
+            cooldown = newAttackComp.cooldown;
+        }
     }
 
     public void AddSharkComponent(SharkComponent comp) {
@@ -150,14 +173,40 @@ public class Shark : MonoBehaviour
         sharkComponents.Remove(comp);
     }
 
-    public virtual void TakeDamage() {
+    public virtual void TakeDamage(AttackType attackType) {
+        switch (attackType)
+        {
+            case AttackType.Melee:
+                currHealth -= meleeDamage;
+                break;
+            case AttackType.Bullet:
+                currHealth -= bulletDamage;
+                break;   
+            case AttackType.Electricity:
+                currHealth -= electricityDamage;
+                break;
+        }
+        StartCoroutine(DamageAnim());
+        if (currHealth <= 0) {
+            Die();
+        }
+        // Enemy and player shark handles ui health bar differently.
+    }
 
+    protected IEnumerator DamageAnim() {
+        GetComponent<SpriteRenderer>().color = damageColor;
+        yield return new WaitForSeconds(0.5f);
+        GetComponent<SpriteRenderer>().color = Color.white;
     }
 
     void OnTriggerEnter2D(Collider2D col) {
         if (col.tag == "Electricity" && !immuneToElectricity) {
-            TakeDamage();
+            TakeDamage(AttackType.Electricity);
         }
+    }
+
+    public virtual void Die() {
+
     }
 
 }

@@ -13,13 +13,15 @@ public class EnemyShark : Shark
         }
     }
 
-    public override void TakeDamage() {
-        Die();
+     public override void TakeDamage(AttackType attackType)
+    {
+        base.TakeDamage(attackType);
     }
 
-    public void Die() {
+
+    public override void Die() {
         spawner.RemoveShark(this);
-        if (sharkComponents.Count > 0 && Random.Range(0, 3) == 0) {
+        if (sharkComponents.Count > 0 && Random.Range(0.0f, 1.0f) < 0.35f) {
             sharkComponents[Random.Range(0, sharkComponents.Count)].Drop();
         }
         Destroy(gameObject);

@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 1655792001475977787}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.388, y: 0.101, z: -0.7}
-  m_LocalScale: {x: 3.6, y: 3.6, z: 3}
+  m_LocalScale: {x: 4, y: 4, z: 3}
   m_Children: []
   m_Father: {fileID: 2519590962126605347}
   m_RootOrder: 0
@@ -105,21 +105,21 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.06666667, y: 0.06666667}
+    oldSize: {x: 0.05, y: 0.05}
     newSize: {x: 0.16, y: 0.16}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.06, y: 0.06}
+  m_Size: {x: 0.04, y: 0.04}
   m_EdgeRadius: 0
 --- !u!1 &2881093863502631788
 GameObject:
@@ -131,11 +131,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2519590962126605347}
   - component: {fileID: 1029712706218024534}
-  - component: {fileID: 3688258738253707221}
-  - component: {fileID: 2446464471935867519}
-  - component: {fileID: 7251100482935521062}
   - component: {fileID: 1870671152395607779}
   - component: {fileID: 2469195334303683647}
+  - component: {fileID: 6676269621757589488}
   m_Layer: 10
   m_Name: EnemyShark
   m_TagString: Enemy
@@ -209,54 +207,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!70 &3688258738253707221
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2881093863502631788}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.0032669445, y: 0.1133519}
-  m_Size: {x: 0.9547305, y: 0.30664793}
-  m_Direction: 1
---- !u!70 &2446464471935867519
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2881093863502631788}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.42218244, y: 0.15589568}
-  m_Size: {x: 0.14270271, y: 0.4005658}
-  m_Direction: 0
---- !u!70 &7251100482935521062
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2881093863502631788}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.007643743, y: 0.1456381}
-  m_Size: {x: 0.1712612, y: 0.62431484}
-  m_Direction: 0
 --- !u!50 &1870671152395607779
 Rigidbody2D:
   serializedVersion: 4
@@ -290,19 +240,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a0cdfcdfa88740dbb095181397a8e2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meleeHitBox: {fileID: 1655792001475977787}
   sharkComponents: []
   waterProbes: {fileID: 4099459732777099954}
+  meleeHitBox: {fileID: 1655792001475977787}
   buoyantForce: {x: 0, y: 10}
   waterPropulsion: 2
   airPropulsion: 1
   attackPropulsion: 2
+  maxHealth: 15
+  meleeDamage: 10
+  bulletDamage: 5
+  electricityDamage: 20
+  immuneToElectricity: 0
+  damageColor: {r: 0.764151, g: 0.046858337, b: 0.046858337, a: 1}
   cooldown: 1
   attackComp: {fileID: 0}
   cooldownTimer: 0
-  damageColor: {r: 0, g: 0, b: 0, a: 0}
-  immuneToElectricity: 0
   spawner: {fileID: 0}
+--- !u!70 &6676269621757589488
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2881093863502631788}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.021643836, y: 0.12957908}
+  m_Size: {x: 0.8063015, y: 0.4477117}
+  m_Direction: 1
 --- !u!1 &3250928268694359536
 GameObject:
   m_ObjectHideFlags: 0

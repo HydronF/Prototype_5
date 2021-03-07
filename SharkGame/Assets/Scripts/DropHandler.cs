@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class DropHandler : MonoBehaviour
 {
-    public GameObject pickupSprite;
+    public UIManager uiManager;
     // Start is called before the first frame update
     void Start()
     {
+        uiManager = FindObjectOfType<UIManager>();
         Destroy(transform.parent.gameObject, 5.0f);
     }
 
@@ -19,16 +20,20 @@ public class DropHandler : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other) {
         if (other.tag == "Player") {
-            pickupSprite.SetActive(true);
+            uiManager.ShowPickupPrompt(transform.parent);
             other.GetComponent<PlayerShark>().SetPotentialPickup(transform.parent.GetComponent<SharkComponent>());
         }
     }
 
     void OnTriggerExit2D(Collider2D other) {
         if (other.tag == "Player") {
-            pickupSprite.SetActive(false);
-            other.GetComponent<PlayerShark>().SetPotentialPickup(transform.parent.GetComponent<SharkComponent>());
+            uiManager.HidePickupPrompt(transform.parent);
+            other.GetComponent<PlayerShark>().RemovePotentialPickup();
         }
+    }
+
+    void OnDestroy() {
+        uiManager.RemovePickupPrompt(transform.parent);
     }
 
 }
