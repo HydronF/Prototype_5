@@ -18,7 +18,11 @@ public class Shark : MonoBehaviour
     public GameObject meleeHitBox;
     protected PixelManager pixelManager;
     protected UIManager uiManager;
-    Transform player;
+    public AudioClip hurtSound;
+    public AudioClip meleeAirSound;
+    public AudioClip meleeWaterSound;
+
+    protected Transform player;
 
     [Header("Movement and Physics")]
     public Vector2 buoyantForce;
@@ -42,10 +46,11 @@ public class Shark : MonoBehaviour
     public SharkComponent attackComp;
     public float cooldownTimer;
 
+    protected PixelContent currPixel;
+
     // Start is called before the first frame update
     protected void Start()
     {
-        player = GameObject.FindWithTag("Player").transform;
         uiManager = FindObjectOfType<UIManager>();
         pixelManager = FindObjectOfType<PixelManager>();
         sharkComponents = new List<SharkComponent>();
@@ -59,12 +64,6 @@ public class Shark : MonoBehaviour
     protected void Update()
     {
         cooldownTimer -= Time.deltaTime;
-    }
-
-    void FixedUpdate() {
-        dir = GetTargetDir(player.position);
-        RotateTowards(dir);
-        MoveTowards(dir);
     }
 
     protected Vector2 GetTargetDir(Vector3 targetPos) {
@@ -107,7 +106,7 @@ public class Shark : MonoBehaviour
     }
 
     protected void MoveTowards(Vector2 toTarget) {
-        PixelContent currPixel = PixelContent.Empty;
+        currPixel = PixelContent.Empty;
         if (pixelManager.GetContentWorld(transform.position) == PixelContent.Water) {
             currPixel = PixelContent.Water;
         }
@@ -142,6 +141,12 @@ public class Shark : MonoBehaviour
     }
 
     IEnumerator MeleeAttack() {
+        if (currPixel == PixelContent.Empty) {
+            GetComponent<AudioSource>().PlayOneShot(meleeAirSound);
+        }
+        else if (currPixel == PixelContent.Water) {
+            GetComponent<AudioSource>().PlayOneShot(meleeWaterSound);
+        }
         meleeHitBox.SetActive(true);
         Vector2 forceDir = - new Vector2(transform.right.x, transform.right.y).normalized;
         GetComponent<Rigidbody2D>().AddForce(forceDir * attackPropulsion, ForceMode2D.Impulse);
@@ -186,6 +191,7 @@ public class Shark : MonoBehaviour
                 currHealth -= electricityDamage;
                 break;
         }
+        GetComponent<AudioSource>().PlayOneShot(hurtSound);
         StartCoroutine(DamageAnim());
         if (currHealth <= 0) {
             Die();

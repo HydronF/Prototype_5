@@ -15,6 +15,7 @@ public class CannonComponent : SharkComponent
         shark.NewAttack(this);
         shark.cooldown = shootingCooldown;
         transform.localPosition = new Vector3(0.0f, 0.0f, -0.1f);
+        if (shark is EnemyShark) GetComponent<AudioSource>().volume = GetComponent<AudioSource>().volume * 0.4f;
     }
 
     public override void Attack() {
@@ -22,6 +23,7 @@ public class CannonComponent : SharkComponent
         GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation, transform);
         Vector2 dir = - new Vector2(transform.right.x, transform.right.y);
         bullet.GetComponent<Rigidbody2D>().AddForce(startingForce * dir, ForceMode2D.Impulse);
+        GetComponent<AudioSource>().Play();
     }
 
     public override void SetMirror(bool toMirror) {

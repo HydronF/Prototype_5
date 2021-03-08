@@ -21,6 +21,10 @@ public class PixelManager : MonoBehaviour
     public float electricityDuration;
     float electricityTimer;
     bool electricityPresent = false;
+    public int maxPixelsRenderedPerFrame;
+    List<Transform> sharknadoTransforms;
+    bool[,] elecTravelled;
+    Queue<Pixel> renderQueue;
 
     [Header("Tilemap")]
     public Tilemap waterMap;
@@ -32,11 +36,8 @@ public class PixelManager : MonoBehaviour
     public TileBase waterForeground;
     public TileBase electricityTile;
 
-    List<Transform> sharknadoTransforms;
-    bool[,] elecTravelled;
-    Queue<Pixel> renderQueue;
-    public int maxPixelsRenderedPerFrame;
-
+    [Header("References")]
+    public AudioManager audioManager;
 
     // Start is called before the first frame update
     void Start()
@@ -343,11 +344,13 @@ public class PixelManager : MonoBehaviour
     }
 
     public void StartTornado(Transform sharknado) {
+        if (sharknadoTransforms.Count == 0) { audioManager.StartStorm(); }
         sharknadoTransforms.Add(sharknado);
     }
 
     public void StopTornado(Transform sharknado) {
         sharknadoTransforms.Remove(sharknado);
+        if (sharknadoTransforms.Count == 0 && audioManager != null) { audioManager.EndStorm(); }
     }
 
 
@@ -427,6 +430,7 @@ public class PixelManager : MonoBehaviour
     }
 
     public void ActivateElectricity(Vector3 worldPos) {
+        audioManager.StartElectricity();
         electricityPresent = true;
         electricityTimer = electricityDuration;
         Vector2Int center = GetPixelAtPos(worldPos);
@@ -464,6 +468,7 @@ public class PixelManager : MonoBehaviour
     }
 
     public void ClearElectricity() {
+        audioManager.EndElectricity();
         foreach (Pixel px in pixelArray) {
             if (px.content == PixelContent.Electricity) {
                 if (foreground.GetTile(PixelToTile(px)) == waterForeground) {

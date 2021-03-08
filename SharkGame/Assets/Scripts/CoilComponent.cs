@@ -18,13 +18,17 @@ public class CoilComponent : SharkComponent
         transform.localPosition = new Vector3(0.0f, 0.0f, -0.2f);
         pixelManager = FindObjectOfType<PixelManager>();
         shieldSprite.SetActive(false);
+        if (shark is EnemyShark) GetComponent<AudioSource>().volume = GetComponent<AudioSource>().volume * 0.4f;
     }
 
 
     public override void Attack() {
-        shark.cooldownTimer = coilCooldown;
-        pixelManager.ActivateElectricity(transform.position);
-        StartCoroutine(HandleImmunity());
+        if (shark != null) {
+            shark.cooldownTimer = coilCooldown;
+            pixelManager.ActivateElectricity(transform.position);
+            StartCoroutine(HandleImmunity());
+            GetComponent<AudioSource>().Play();
+        }
     }
 
     IEnumerator HandleImmunity() {

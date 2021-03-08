@@ -5,12 +5,10 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     PixelManager pixelManager;
-    AudioSource hitSound;
     // Start is called before the first frame update
     void Start()
     {
         pixelManager = FindObjectOfType<PixelManager>();
-        hitSound = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -34,13 +32,8 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    void Explode() {
-        hitSound.Play();
-    }
-
     void OnTriggerEnter2D(Collider2D other) {
         if (other.tag == "Player" || other.tag == "Enemy") {
-            Explode(); 
             other.GetComponent<Shark>().TakeDamage(AttackType.Bullet);
             Destroy(gameObject);
         }

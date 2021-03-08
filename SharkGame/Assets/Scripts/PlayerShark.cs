@@ -5,44 +5,62 @@ using UnityEngine;
 public class PlayerShark : Shark
 {
     public List<GameObject> componentPrefabs;
+    // AudioLowPassFilter lowPassFilter;
     SharkComponent potentialPickup;
+    PixelContent lastPixel = PixelContent.Empty;
     int pickupType = -1;
+    public AudioSource splashSound;
+    bool dead = false;
 
     new void Start() {
         base.Start();
         uiManager.UpdatePlayerHealth(currHealth, maxHealth);
+        // lowPassFilter = FindObjectOfType<AudioLowPassFilter>();
     }
 
     new void Update() {
-        base.Update();
-        uiManager.UpdateCooldown(cooldownTimer, cooldown);
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        dir = GetTargetDir(mousePos);
-        if (Input.GetMouseButton(0)) {
-            Attack();
-        }
-        if (Input.GetMouseButtonDown(1)) {
-            if (potentialPickup != null) {
-                Pickup();
+        if (!dead) {
+            base.Update();
+            uiManager.UpdateCooldown(cooldownTimer, cooldown);
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            dir = GetTargetDir(mousePos);
+            if (Input.GetMouseButton(0)) {
+                Attack();
             }
-        }
-        if (Input.GetMouseButtonDown(2)) {
-            if (attackComp) {
-                NewAttack(null);
+            if (Input.GetMouseButtonDown(1)) {
+                if (potentialPickup != null) {
+                    Pickup();
+                }
+            }
+            if (Input.GetMouseButtonDown(2)) {
+                if (attackComp) {
+                    NewAttack(null);
+                }
             }
         }
     }
     
     void FixedUpdate()
     {
-        RotateTowards(dir);
-        MoveTowards(dir);
+        if (!dead) {
+            RotateTowards(dir);
+            MoveTowards(dir);
+            // if (currPixel == PixelContent.Empty) { lowPassFilter.enabled = false; }
+            // else if (currPixel == PixelContent.Water) { lowPassFilter.enabled = true; }
+            if (lastPixel != currPixel && !splashSound.isPlaying) {
+                splashSound.Play();
+            }
+            lastPixel = currPixel;
+        }
     }
 
     public override void TakeDamage(AttackType attackType)
     {
         base.TakeDamage(attackType);
         uiManager.UpdatePlayerHealth(currHealth, maxHealth);
+        if (currHealth <= 0) {
+            Die();
+        }
     }
 
     public void Pickup() {
@@ -68,6 +86,7 @@ public class PlayerShark : Shark
     }
 
     public override void Die() {
+        dead = true;
         uiManager.DeathScreen();
     }
 

@@ -17,6 +17,7 @@ public class SharkSpawner : MonoBehaviour
     int spawnedThisWave = 0;
     List<EnemyShark> enemySharks;
     float spawnTimer;
+    bool started = false;
 
     // Start is called before the first frame update
     void Start()
@@ -27,12 +28,15 @@ public class SharkSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CheckNextWave();
-        if (spawnTimer < 0 && (waves[currentWave].sharkCount == -1 || spawnedThisWave < waves[currentWave].sharkCount)) {
-            SpawnShark();
-            spawnTimer = waves[currentWave].spawnGap;
+        if (started) {
+            CheckNextWave();
+            if (spawnTimer < 0 && (waves[currentWave].sharkCount == -1 || spawnedThisWave < waves[currentWave].sharkCount)) {
+                SpawnShark();
+                spawnTimer = waves[currentWave].spawnGap;
+            }
+            spawnTimer -= Time.deltaTime;
         }
-        spawnTimer -= Time.deltaTime;
+        else if (Input.GetMouseButtonUp(0)) { started = true; }
     }
 
     private void CheckNextWave()

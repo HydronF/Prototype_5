@@ -5,11 +5,25 @@ using UnityEngine;
 public class EnemyShark : Shark
 {
     public SharkSpawner spawner;
+    bool dead = false;
+
+    new void Start() {
+        base.Start();
+        player = GameObject.FindWithTag("Player").transform;
+    }
     new void Update()
     {
         base.Update();
-        if (cooldownTimer < - 2 * cooldown) {
+        if (cooldownTimer < - 2.0f * cooldown && !dead) {
             Attack();
+        }
+    }
+
+    void FixedUpdate() {
+        if (player != null && !dead) {
+            dir = GetTargetDir(player.position);
+            RotateTowards(dir);
+            MoveTowards(dir);
         }
     }
 
@@ -24,7 +38,9 @@ public class EnemyShark : Shark
         if (sharkComponents.Count > 0 && Random.Range(0.0f, 1.0f) < 0.35f) {
             sharkComponents[Random.Range(0, sharkComponents.Count)].Drop();
         }
-        Destroy(gameObject);
+        uiManager.TrackKill();
+        dead = true;
+        Destroy(gameObject, 0.5f);
     }
 
 }
