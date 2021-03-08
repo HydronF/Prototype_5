@@ -16,11 +16,7 @@ public class PlayerShark : Shark
         base.Start();
         uiManager.UpdatePlayerHealth(currHealth, maxHealth);
         // lowPassFilter = FindObjectOfType<AudioLowPassFilter>();
-        Instantiate(componentPrefabs[3], transform).GetComponent<SharkComponent>().shark = this;
-        Instantiate(componentPrefabs[2], transform).GetComponent<SharkComponent>().shark = this;
-        Instantiate(componentPrefabs[1], transform).GetComponent<SharkComponent>().shark = this;
-
-
+        // Instantiate(componentPrefabs[3], transform).GetComponent<SharkComponent>().shark = this;
     }
 
     new void Update() {
