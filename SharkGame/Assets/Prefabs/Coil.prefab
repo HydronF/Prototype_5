@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 1542116332161041312}
   - component: {fileID: 1542116332161041315}
   - component: {fileID: 1542116332161041314}
-  - component: {fileID: 313319511720813238}
   - component: {fileID: 5358312043535526959}
   - component: {fileID: 67991231270892508}
+  - component: {fileID: 5448936710817331279}
   m_Layer: 8
   m_Name: Coil
   m_TagString: Untagged
@@ -103,32 +103,6 @@ MonoBehaviour:
   dropHandler: {fileID: 7759737922661982206, guid: 1ba246847c17e4ed5a0df64d2c04805a,
     type: 3}
   immuneColor: {r: 1, g: 0.9653822, b: 0.23137254, a: 1}
---- !u!61 &313319511720813238
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1542116332161041313}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.25145656, y: 0.28882045}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.8, y: 0.8}
-    newSize: {x: 1.6, y: 1.6}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1.1177478, y: 1.3485008}
-  m_EdgeRadius: 0
 --- !u!50 &5358312043535526959
 Rigidbody2D:
   serializedVersion: 4
@@ -246,6 +220,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!58 &5448936710817331279
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1542116332161041313}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.21480268, y: 0.15722626}
+  serializedVersion: 2
+  m_Radius: 0.5089156
 --- !u!1 &1985443616512175696
 GameObject:
   m_ObjectHideFlags: 0

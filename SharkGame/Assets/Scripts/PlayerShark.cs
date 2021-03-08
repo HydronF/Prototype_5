@@ -6,17 +6,20 @@ public class PlayerShark : Shark
 {
     public List<GameObject> componentPrefabs;
     // AudioLowPassFilter lowPassFilter;
-    SharkComponent potentialPickup;
+    public List<SharkComponent> potentialPickups;
     PixelContent lastPixel = PixelContent.Empty;
-    int pickupType = -1;
     public AudioSource splashSound;
     bool dead = false;
 
     new void Start() {
         base.Start();
         uiManager.UpdatePlayerHealth(currHealth, maxHealth);
+        potentialPickups = new List<SharkComponent>();
         // lowPassFilter = FindObjectOfType<AudioLowPassFilter>();
+        // Instantiate(componentPrefabs[1], transform).GetComponent<SharkComponent>().shark = this;
+        // Instantiate(componentPrefabs[2], transform).GetComponent<SharkComponent>().shark = this;
         // Instantiate(componentPrefabs[3], transform).GetComponent<SharkComponent>().shark = this;
+
     }
 
     new void Update() {
@@ -29,7 +32,7 @@ public class PlayerShark : Shark
                 Attack();
             }
             if (Input.GetMouseButtonDown(1)) {
-                if (potentialPickup != null) {
+                if (potentialPickups.Count != 0) {
                     Pickup();
                 }
             }
@@ -67,8 +70,13 @@ public class PlayerShark : Shark
     }
 
     public void Pickup() {
-        Destroy(potentialPickup.gameObject);
-        potentialPickup = null;
+        int pickupType = -1;
+        if (potentialPickups[0] is CannonComponent) pickupType = 0;
+        else if (potentialPickups[0] is TornadoComponent) pickupType = 1;
+        else if (potentialPickups[0] is WingComponent) pickupType = 2;
+        else if (potentialPickups[0] is CoilComponent) pickupType = 3;
+        
+        Destroy(potentialPickups[0].gameObject);
         SharkComponent newComp = Instantiate(componentPrefabs[pickupType], transform.position, transform.rotation, transform).GetComponent<SharkComponent>();
         if (GetComponent<SpriteRenderer>().flipY) { 
             newComp.SetMirror(true);
@@ -76,16 +84,12 @@ public class PlayerShark : Shark
         newComp.shark = this;
     }
 
-    public void SetPotentialPickup(SharkComponent comp) {
-        potentialPickup = comp;
-        if (comp is CannonComponent) pickupType = 0;
-        else if (comp is TornadoComponent) pickupType = 1;
-        else if (comp is WingComponent) pickupType = 2;
-        else if (comp is CoilComponent) pickupType = 3;
+    public void AddPotentialPickup(SharkComponent comp) {
+        potentialPickups.Add(comp);
     }
 
-    public void RemovePotentialPickup() {
-        potentialPickup = null;
+    public void RemovePotentialPickup(SharkComponent comp) {
+        potentialPickups.Remove(comp);
     }
 
     public override void Die() {

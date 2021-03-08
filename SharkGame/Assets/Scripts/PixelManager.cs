@@ -11,9 +11,6 @@ public class PixelManager : MonoBehaviour
     public uint totalRow;
     public uint totalCol;
     public float pixelSize;
-
-    public Vector2 topLeftPos;
-
     public Pixel[,] pixelArray;
     
     [Header("Physics")]
@@ -73,7 +70,7 @@ public class PixelManager : MonoBehaviour
                 pixelArray[i, j].row = i;
                 pixelArray[i, j].col = j;
                 pixelArray[i, j].movedThisFrame = false;
-                if (i > totalRow / 2) {
+                if (i > totalRow * 11 / 19) {
                     pixelArray[i, j].content = PixelContent.Water;
                 }
                 else if (i == totalRow / 2 && j % 2 == 0) {
@@ -129,7 +126,7 @@ public class PixelManager : MonoBehaviour
 
     void ElectricityMovement(Pixel px)
     {
-        for (int i = 0; i < 5; ++i) {
+        for (int i = 0; i < 10; ++i) {
             ElectricityPass(px);
         }
     }
@@ -370,7 +367,7 @@ public class PixelManager : MonoBehaviour
         int sharkCol = GetPixelAtPos(sharknado.position).y;
         int innerRange = 6;
         int outerRange = 15;
-        int inOutCutoff = 10;
+        int inOutCutoff = 60;
         int bottomRow = (int) totalRow ;
 
         // Middle: Force = Up

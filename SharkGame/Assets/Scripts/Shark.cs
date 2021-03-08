@@ -119,7 +119,7 @@ public class Shark : MonoBehaviour
         if (currPixel == PixelContent.Empty) {
             GetComponent<Rigidbody2D>().drag = 0.3f;
             GetComponent<Rigidbody2D>().AddForce(airPropulsion * toTarget);
-            if (canFly) GetComponent<Rigidbody2D>().AddForce(new Vector2(0.0f, 10.5f));
+            if (canFly) GetComponent<Rigidbody2D>().AddForce(new Vector2(0.0f, 9.0f));
         }
         else if (currPixel == PixelContent.Water) {
             GetComponent<Rigidbody2D>().drag = 3.0f;

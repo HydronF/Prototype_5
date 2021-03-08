@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 3437566926027816182}
   - component: {fileID: 3437566926027816181}
   - component: {fileID: 3437566926027816180}
-  - component: {fileID: -3532452969909985253}
   - component: {fileID: 8116216780622678769}
+  - component: {fileID: 8380308179012716239}
   m_Layer: 8
   m_Name: Wing
   m_TagString: Untagged
@@ -100,32 +100,6 @@ MonoBehaviour:
   cooldown: 0
   dropHandler: {fileID: 7759737922661982206, guid: 1ba246847c17e4ed5a0df64d2c04805a,
     type: 3}
---- !u!61 &-3532452969909985253
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3437566926027816183}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.05239916, y: -0.119469285}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.8, y: 0.8}
-    newSize: {x: 1.6, y: 1.6}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1.5491388, y: 1.2473223}
-  m_EdgeRadius: 0
 --- !u!50 &8116216780622678769
 Rigidbody2D:
   serializedVersion: 4
@@ -147,3 +121,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!58 &8380308179012716239
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3437566926027816183}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.018863559, y: -0.14462066}
+  serializedVersion: 2
+  m_Radius: 0.5634842

@@ -24,7 +24,7 @@ public class Bullet : MonoBehaviour
             GetComponent<Rigidbody2D>().drag = 0.5f;
         }
         else if (currPixel == PixelContent.Water) {
-            GetComponent<Rigidbody2D>().drag = 3.0f;
+            GetComponent<Rigidbody2D>().drag = 5.0f;
         }
 
         if (Mathf.Abs(GetComponent<Rigidbody2D>().velocity.magnitude) < 0.4f) {

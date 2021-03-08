@@ -25,14 +25,14 @@ public class DropHandler : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other) {
         if (other.tag == "Player") {
             uiManager.ShowPickupPrompt(transform.parent);
-            other.GetComponent<PlayerShark>().SetPotentialPickup(transform.parent.GetComponent<SharkComponent>());
+            other.GetComponent<PlayerShark>().AddPotentialPickup(transform.parent.GetComponent<SharkComponent>());
         }
     }
 
     void OnTriggerExit2D(Collider2D other) {
         if (other.tag == "Player") {
             uiManager.HidePickupPrompt(transform.parent);
-            other.GetComponent<PlayerShark>().RemovePotentialPickup();
+            other.GetComponent<PlayerShark>().RemovePotentialPickup(transform.parent.GetComponent<SharkComponent>());
         }
     }
 

@@ -14,7 +14,9 @@ public class WingComponent : SharkComponent
 
     public override void Drop()
     {
-        shark.DeactivateFlying();
+        if (shark != null) {
+            shark.DeactivateFlying();
+        }
         base.Drop();
     }
 }

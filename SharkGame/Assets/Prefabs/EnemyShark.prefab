@@ -251,10 +251,10 @@ MonoBehaviour:
   waterPropulsion: 2
   airPropulsion: 1
   attackPropulsion: 2
-  maxHealth: 15
+  maxHealth: 20
   meleeDamage: 10
   bulletDamage: 8
-  electricityDamage: 20
+  electricityDamage: 25
   immuneToElectricity: 0
   damageColor: {r: 0.764151, g: 0.046858337, b: 0.046858337, a: 1}
   cooldown: 1

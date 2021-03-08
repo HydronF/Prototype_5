@@ -41,9 +41,9 @@ GameObject:
   - component: {fileID: 8571617152883880067}
   - component: {fileID: 8571617152883880068}
   - component: {fileID: 8571617152883880069}
-  - component: {fileID: 4466677111988665005}
   - component: {fileID: 2490237012258868492}
   - component: {fileID: 1892018167612438135}
+  - component: {fileID: 5226300486914962704}
   m_Layer: 8
   m_Name: Cannon
   m_TagString: Untagged
@@ -129,38 +129,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shark: {fileID: 0}
-  cooldown: 0.4
+  cooldown: 0.25
   dropHandler: {fileID: 7759737922661982206, guid: 1ba246847c17e4ed5a0df64d2c04805a,
     type: 3}
   bulletPrefab: {fileID: 7034155404607409696, guid: ea4640926a84e487a973da3f89f69ad9,
     type: 3}
   bulletSpawn: {fileID: 8571617152143689104}
---- !u!61 &4466677111988665005
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8571617152883880066}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.07717109, y: 0.2585677}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.8, y: 0.8}
-    newSize: {x: 1.6, y: 1.6}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1.4550436, y: 1.2305176}
-  m_EdgeRadius: 0
 --- !u!50 &2490237012258868492
 Rigidbody2D:
   serializedVersion: 4
@@ -278,3 +252,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!58 &5226300486914962704
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8571617152883880066}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.033413887, y: 0.1573239}
+  serializedVersion: 2
+  m_Radius: 0.57403094
