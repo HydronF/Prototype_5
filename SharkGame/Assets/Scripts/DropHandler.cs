@@ -5,11 +5,15 @@ using UnityEngine;
 public class DropHandler : MonoBehaviour
 {
     public UIManager uiManager;
+    Color glitterColor;
+
     // Start is called before the first frame update
     void Start()
     {
+        glitterColor = new Color(0.0f, 0.0f, 0.0f, 0.4f);
         uiManager = FindObjectOfType<UIManager>();
-        Destroy(transform.parent.gameObject, 5.0f);
+        StartCoroutine(GlitterAnim());
+        Destroy(transform.parent.gameObject, 8.0f);
     }
 
     // Update is called once per frame
@@ -35,5 +39,16 @@ public class DropHandler : MonoBehaviour
     void OnDestroy() {
         uiManager.RemovePickupPrompt(transform.parent);
     }
+
+    IEnumerator GlitterAnim() {
+        yield return new WaitForSeconds(5.0f);
+        while (true) { 
+            transform.parent.GetComponent<SpriteRenderer>().color = glitterColor;
+            yield return new WaitForSeconds(0.2f);
+            transform.parent.GetComponent<SpriteRenderer>().color = Color.white;
+            yield return new WaitForSeconds(0.2f);
+        }
+    }
+
 
 }

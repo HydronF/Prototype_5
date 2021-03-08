@@ -9,6 +9,7 @@ public class SharkComponent : MonoBehaviour
     public GameObject dropHandler;
     protected PixelManager pixelManager;
     bool dropped = false;
+
     // Start is called before the first frame update
     protected virtual void Start()
     {
@@ -48,13 +49,13 @@ public class SharkComponent : MonoBehaviour
         }
     }
 
-    public void Drop() {
+    public virtual void Drop() {
         dropped = true;
         shark = null;
         var newDrop = Instantiate(dropHandler, transform.position, transform.rotation, transform).GetComponent<DropHandler>();
         transform.SetParent(transform.parent.parent);
         GetComponent<Rigidbody2D>().isKinematic = false;
         GetComponent<Collider2D>().enabled = true;
-
     }
+
 }

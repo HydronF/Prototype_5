@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/SharkWaterTest.unity
+    guid: 3f2dfd5c81bd143dd96592e905fe3238
   m_configObjects: {}

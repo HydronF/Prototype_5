@@ -431,8 +431,8 @@ public class PixelManager : MonoBehaviour
 
     public void ActivateElectricity(Vector3 worldPos) {
         audioManager.StartElectricity();
-        electricityPresent = true;
         electricityTimer = electricityDuration;
+        electricityPresent = true;
         Vector2Int center = GetPixelAtPos(worldPos);
         SetElectricity(center.x - 3, center.y, PixelDirection.Up);
         SetElectricity(center.x + 3, center.y, PixelDirection.Down);

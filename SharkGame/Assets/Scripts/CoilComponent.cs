@@ -5,8 +5,8 @@ using UnityEngine;
 public class CoilComponent : SharkComponent
 {
     public const float coilCooldown = 1.5f;
-    public GameObject shieldSprite;
-    // public Color immuneColor;
+    // public GameObject shieldSprite;
+    public Color immuneColor;
 
     // Start is called before the first frame update
 
@@ -17,7 +17,7 @@ public class CoilComponent : SharkComponent
         shark.cooldown = coilCooldown;
         transform.localPosition = new Vector3(0.0f, 0.0f, -0.2f);
         pixelManager = FindObjectOfType<PixelManager>();
-        shieldSprite.SetActive(false);
+        // shieldSprite.SetActive(false);
         if (shark is EnemyShark) GetComponent<AudioSource>().volume = GetComponent<AudioSource>().volume * 0.4f;
     }
 
@@ -34,19 +34,22 @@ public class CoilComponent : SharkComponent
     IEnumerator HandleImmunity() {
         if (shark != null) {
             shark.immuneToElectricity = true;
-            // shark.GetComponent<SpriteRenderer>().color = immuneColor;
-            shieldSprite.SetActive(true);
+            shark.GetComponent<SpriteRenderer>().color = immuneColor;
+            // shieldSprite.SetActive(true);
 
         }
         yield return new WaitForSeconds(pixelManager.electricityDuration + 0.1f);
         if (shark != null) {
             shark.immuneToElectricity = false;
-            shieldSprite.SetActive(false);
+            if (shark.GetComponent<SpriteRenderer>().color == immuneColor) {
+                shark.GetComponent<SpriteRenderer>().color = Color.white;
+            }
+            // shieldSprite.SetActive(false);
         }
     }
 
     public override void SetMirror(bool toMirror) {
         base.SetMirror(toMirror);
-        shieldSprite.GetComponent<SpriteRenderer>().flipY = toMirror;
+        // shieldSprite.GetComponent<SpriteRenderer>().flipY = toMirror;
     }
 }

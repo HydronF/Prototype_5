@@ -53,7 +53,7 @@ public class AudioManager : MonoBehaviour
 
     public void StartElectricity() {
         if (electricityFade != null) { StopCoroutine(electricityFade); }
-        electricityFade = StartCoroutine(LinearFade(oceanSound, oceanSoundFadeTime, electricitySound.volume, electricityVolume));
+        electricityFade = StartCoroutine(LinearFade(electricitySound, electricityFadeTime, electricitySound.volume, electricityVolume));
     }
 
     public void EndElectricity() {
@@ -64,7 +64,6 @@ public class AudioManager : MonoBehaviour
 
     IEnumerator LinearFade(AudioSource audio, float fadeTime, float startVolume, float targetVolume) {
         audio.volume = startVolume;
-        if (audio == electricitySound) { Debug.Log("Pikachu start:" + startVolume + ", target: " + targetVolume);}
         if (!audio.isPlaying) { audio.Play(); }
         float deltaVolume = (targetVolume - startVolume) / fadeTime;
         while (!NearEqual(audio.volume, targetVolume, 0.01f)) {

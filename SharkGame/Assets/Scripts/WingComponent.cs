@@ -11,4 +11,10 @@ public class WingComponent : SharkComponent
         shark.ActivateFlying();
         transform.localPosition = new Vector3(0.0f, 0.0f, -0.3f);
     }
+
+    public override void Drop()
+    {
+        shark.DeactivateFlying();
+        base.Drop();
+    }
 }

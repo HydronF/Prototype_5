@@ -159,6 +159,11 @@ public class Shark : MonoBehaviour
         canFly = true;
     }
 
+    public void DeactivateFlying() {
+        canFly = false;
+    }
+
+
     public void NewAttack(SharkComponent newAttackComp) {
         if (attackComp != null) {
             sharkComponents.Remove(attackComp);

@@ -32,7 +32,9 @@ public class UIManager : MonoBehaviour
             startText.SetActive(false);
         }
         if (Input.GetKeyUp(KeyCode.R)) {
+            
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            AudioListener.volume = 1.0f;
         }
     }
 
