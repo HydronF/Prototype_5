@@ -6,6 +6,7 @@ public class PlayerShark : Shark
 {
     public List<GameObject> componentPrefabs;
     // AudioLowPassFilter lowPassFilter;
+    // AudioChorusFilter chorusFilter;
     public List<SharkComponent> potentialPickups;
     PixelContent lastPixel = PixelContent.Empty;
     public AudioSource splashSound;
@@ -16,6 +17,8 @@ public class PlayerShark : Shark
         uiManager.UpdatePlayerHealth(currHealth, maxHealth);
         potentialPickups = new List<SharkComponent>();
         // lowPassFilter = FindObjectOfType<AudioLowPassFilter>();
+        // chorusFilter = FindObjectOfType<AudioChorusFilter>();
+
         // Instantiate(componentPrefabs[1], transform).GetComponent<SharkComponent>().shark = this;
         // Instantiate(componentPrefabs[2], transform).GetComponent<SharkComponent>().shark = this;
         // Instantiate(componentPrefabs[3], transform).GetComponent<SharkComponent>().shark = this;
@@ -51,8 +54,22 @@ public class PlayerShark : Shark
         if (!dead) {
             RotateTowards(dir);
             MoveTowards(dir);
-            // if (currPixel == PixelContent.Empty) { lowPassFilter.enabled = false; }
-            // else if (currPixel == PixelContent.Water) { lowPassFilter.enabled = true; }
+            // bool submerged = true;
+            // foreach (Transform child in waterProbes) {
+            //     if (pixelManager.GetContentWorld(child.position) == PixelContent.Empty) {
+            //         submerged = false;
+            //         break;
+            //     }
+            // }
+            // if (submerged) {
+            //     lowPassFilter.enabled = true;
+            //     chorusFilter.enabled = true;
+            // }
+            // else {
+            //     lowPassFilter.enabled = false;
+            //     chorusFilter.enabled = false;
+            // }
+
             if (lastPixel != currPixel && !splashSound.isPlaying) {
                 splashSound.Play();
             }

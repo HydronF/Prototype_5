@@ -251,7 +251,7 @@ MonoBehaviour:
   waterPropulsion: 2
   airPropulsion: 1
   attackPropulsion: 2
-  maxHealth: 20
+  maxHealth: 15
   meleeDamage: 10
   bulletDamage: 8
   electricityDamage: 25

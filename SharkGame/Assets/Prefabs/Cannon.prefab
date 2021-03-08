@@ -129,7 +129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shark: {fileID: 0}
-  cooldown: 0.25
+  cooldown: 0.3
   dropHandler: {fileID: 7759737922661982206, guid: 1ba246847c17e4ed5a0df64d2c04805a,
     type: 3}
   bulletPrefab: {fileID: 7034155404607409696, guid: ea4640926a84e487a973da3f89f69ad9,

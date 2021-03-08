@@ -6,6 +6,7 @@ public class DropHandler : MonoBehaviour
 {
     public UIManager uiManager;
     Color glitterColor;
+    PlayerShark player;
 
     // Start is called before the first frame update
     void Start()
@@ -25,7 +26,8 @@ public class DropHandler : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other) {
         if (other.tag == "Player") {
             uiManager.ShowPickupPrompt(transform.parent);
-            other.GetComponent<PlayerShark>().AddPotentialPickup(transform.parent.GetComponent<SharkComponent>());
+            player = other.GetComponent<PlayerShark>();
+            player.AddPotentialPickup(transform.parent.GetComponent<SharkComponent>());
         }
     }
 
@@ -33,11 +35,16 @@ public class DropHandler : MonoBehaviour
         if (other.tag == "Player") {
             uiManager.HidePickupPrompt(transform.parent);
             other.GetComponent<PlayerShark>().RemovePotentialPickup(transform.parent.GetComponent<SharkComponent>());
+            player = null;
         }
     }
 
     void OnDestroy() {
         uiManager.RemovePickupPrompt(transform.parent);
+        if (player != null) {
+            player.RemovePotentialPickup(transform.parent.GetComponent<SharkComponent>());
+        }
+
     }
 
     IEnumerator GlitterAnim() {
