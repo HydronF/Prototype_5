@@ -158,13 +158,13 @@ MonoBehaviour:
     sharkComponents:
     - {fileID: 8571617152883880066, guid: 67862180f8695449b8a1e05c5b0cb42a, type: 3}
     spawnGap: 4
-  - sharkCount: 14
+  - sharkCount: 12
     sharkComponents:
     - {fileID: 8571617152883880066, guid: 67862180f8695449b8a1e05c5b0cb42a, type: 3}
     - {fileID: 1542116332161041313, guid: aafcf17d724e04bf98d031b14e15e52f, type: 3}
     - {fileID: 6729175041799680331, guid: c6014a3d18d634fde925056338a78f3d, type: 3}
     spawnGap: 3
-  - sharkCount: 16
+  - sharkCount: 20
     sharkComponents:
     - {fileID: 8571617152883880066, guid: 67862180f8695449b8a1e05c5b0cb42a, type: 3}
     - {fileID: 1542116332161041313, guid: aafcf17d724e04bf98d031b14e15e52f, type: 3}
@@ -177,7 +177,7 @@ MonoBehaviour:
     - {fileID: 1542116332161041313, guid: aafcf17d724e04bf98d031b14e15e52f, type: 3}
     - {fileID: 6729175041799680331, guid: c6014a3d18d634fde925056338a78f3d, type: 3}
     - {fileID: 3437566926027816183, guid: 8aaa0104fc600455abe5ecf23c708bb3, type: 3}
-    spawnGap: 2
+    spawnGap: 1
   sharkPrefab: {fileID: 2881093863502631788, guid: a61523d46aed9437fb8f682fc00447c7,
     type: 3}
 --- !u!4 &31429869
@@ -2319,7 +2319,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 40, y: -30}
-  m_SizeDelta: {x: 200, y: 10}
+  m_SizeDelta: {x: 300, y: 10}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1942837987
 MonoBehaviour:
@@ -2603,15 +2603,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3eeae4473e964e569c924a334e3a51d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalRow: 144
-  totalCol: 256
+  totalRow: 108
+  totalCol: 192
   pixelSize: 0.05
   simTimeStep: 0.02
   electricityDuration: 1
   maxPixelsRenderedPerFrame: 7000
   waterMap: {fileID: 367155525}
   electricityMap: {fileID: 2073618373}
-  topLeft: {x: -128, y: 72, z: 0}
+  topLeft: {x: -96, y: 53, z: 0}
   emptyTile: {fileID: 11400000, guid: 31a07520fb24346969f650d9f65a16d7, type: 2}
   waterTile: {fileID: 11400000, guid: da11d8c85c4124c5fbc10f98ad4eb598, type: 2}
   foreground: {fileID: 373306388}
@@ -2993,6 +2993,11 @@ PrefabInstance:
         type: 3}
       propertyPath: attackPropulsion
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4312311917315025689, guid: 938d714175b2f49ffa8a50939b27bec9,
+        type: 3}
+      propertyPath: maxHealth
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 4312311917589829216, guid: 938d714175b2f49ffa8a50939b27bec9,
         type: 3}

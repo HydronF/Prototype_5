@@ -51,14 +51,15 @@ public class SharkSpawner : MonoBehaviour
 
     void SpawnShark() {
         // Instantiate new shark
-        EnemyShark newShark = Instantiate(sharkPrefab, transform.position, transform.rotation, transform).GetComponent<EnemyShark>();
+        Vector3 spawnPos = new Vector3(Random.Range(-4.3f, 4.3f), transform.position.y, transform.position.z);
+        EnemyShark newShark = Instantiate(sharkPrefab, spawnPos, transform.rotation, transform).GetComponent<EnemyShark>();
         newShark.spawner = this;
         enemySharks.Add(newShark);
         ++spawnedThisWave;
         // Give it components
         foreach (GameObject compPrefab in waves[currentWave].sharkComponents) {
             if (Random.Range(0, 2) == 1) {
-                SharkComponent newComp = Instantiate(compPrefab, transform.position, transform.rotation, newShark.transform).GetComponent<SharkComponent>();
+                SharkComponent newComp = Instantiate(compPrefab, newShark.transform.position, newShark.transform.rotation, newShark.transform).GetComponent<SharkComponent>();
                 newComp.shark = newShark;
             }
         }

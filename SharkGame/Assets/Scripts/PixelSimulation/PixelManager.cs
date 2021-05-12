@@ -70,7 +70,7 @@ public class PixelManager : MonoBehaviour
                 pixelArray[i, j].row = i;
                 pixelArray[i, j].col = j;
                 pixelArray[i, j].movedThisFrame = false;
-                if (i > totalRow * 11 / 19) {
+                if (i > totalRow * 11 / 20) {
                     pixelArray[i, j].content = PixelContent.Water;
                 }
                 else if (i == totalRow / 2 && j % 2 == 0) {
@@ -126,12 +126,14 @@ public class PixelManager : MonoBehaviour
 
     void ElectricityMovement(Pixel px)
     {
+        // We advance electricity 10 times each frame
         for (int i = 0; i < 10; ++i) {
             ElectricityPass(px);
         }
     }
 
     void ElectricityPass(Pixel px) {
+        // We advance all electricity by 1 tile
         if (px.row <= 0 || px.col <= 0 || px.row >= totalRow - 1 || px.col >= totalCol - 1
             || elecTravelled[px.row, px.col]) {
             return;
@@ -273,9 +275,6 @@ public class PixelManager : MonoBehaviour
 
     List<Pixel> CheckEmpty(Pixel px) {
         List<Pixel> returnList = new List<Pixel>();
-        // if (px.row > 0 && pixelArray[px.row - 1, px.col].content == PixelContent.Empty) {
-        //     returnList.Add(pixelArray[px.row - 1, px.col]);
-        // }
         if (px.row < totalRow - 1 && pixelArray[px.row + 1, px.col].content == PixelContent.Empty) {
             returnList.Add(pixelArray[px.row + 1, px.col]);
         }

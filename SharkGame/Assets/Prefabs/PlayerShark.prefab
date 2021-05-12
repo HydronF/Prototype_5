@@ -364,7 +364,7 @@ MonoBehaviour:
   meleeAirSound: {fileID: 8300000, guid: 0f8dea585ee724514aa7d01e8477ec4a, type: 3}
   meleeWaterSound: {fileID: 8300000, guid: c7a5364e0f6044d4c8d16addffc6c39c, type: 3}
   buoyantForce: {x: 0, y: 10}
-  waterPropulsion: 6
+  waterPropulsion: 7
   airPropulsion: 4
   attackPropulsion: 4
   maxHealth: 300
@@ -381,6 +381,7 @@ MonoBehaviour:
   - {fileID: 6729175041799680331, guid: c6014a3d18d634fde925056338a78f3d, type: 3}
   - {fileID: 3437566926027816183, guid: 8aaa0104fc600455abe5ecf23c708bb3, type: 3}
   - {fileID: 1542116332161041313, guid: aafcf17d724e04bf98d031b14e15e52f, type: 3}
+  potentialPickups: []
   splashSound: {fileID: 1367679813}
 --- !u!82 &396011700
 AudioSource:
